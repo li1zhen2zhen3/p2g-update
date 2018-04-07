@@ -4,13 +4,18 @@ import {Route, Switch} from 'react-router-dom';
 
 import Bundle from './Bundle';
 import Loading from 'components/Loading/Loading';
-
-import Home from 'bundle-loader?lazy&name=home!pages/Home/Home';
-import Page1 from 'bundle-loader?lazy&name=page1!pages/Page1/Page1';
-import Counter from 'bundle-loader?lazy&name=counter!pages/Counter/Counter';
-import UserInfo from 'bundle-loader?lazy&name=userInfo!pages/UserInfo/UserInfo';
 import NotFound from 'bundle-loader?lazy&name=notFound!pages/NotFound/NotFound';
-// import Button1 from 'bundle-loader?lazy&name=button1!pages/Page1/Button1';
+import MainPage from 'bundle-loader?lazy&name=home!pages/MainPage/MainPage';
+
+import Register from 'bundle-loader?lazy&name=register!pages/Account/Register';
+import ForgetPassword from 'bundle-loader?lazy&name=down!pages/Account/ForgetPassword';
+import Login from 'bundle-loader?lazy&name=down!pages/Account/Login';
+import BindBank from 'bundle-loader?lazy&name=down!pages/Account/BindBank';
+import Pay from 'bundle-loader?lazy&name=down!pages/Account/Pay';
+import Withdraw from 'bundle-loader?lazy&name=down!pages/Account/Withdraw';
+import ProductList from 'bundle-loader?lazy&name=down!pages/Investment/ProductList';
+import MyAccount from 'bundle-loader?lazy&name=down!pages/MyAccount/MyAccount';
+
 
 const createComponent = (component) => () => (
     <Bundle load={component}>
@@ -23,10 +28,15 @@ const createComponent = (component) => () => (
 export default () => (
     <div>
         <Switch>
-            <Route exact path="/" component={createComponent(Home)}/>
-            <Route path="/page1" component={createComponent(Page1)}/>
-            <Route path="/counter" component={createComponent(Counter)}/>
-            <Route path="/userinfo" component={createComponent(UserInfo)}/>
+            <Route exact path="/" component={createComponent(MainPage)}/>
+            <Route path="/forgetpassword" component={createComponent(ForgetPassword)}/>
+            <Route path="/register" component={createComponent(Register)}/>
+            <Route path="/login" component={createComponent(Login)}/>
+            <Route path="/bindbank" component={createComponent(BindBank)}/>
+            <Route path="/pay" component={createComponent(Pay)}/>
+            <Route path="/withdraw" component={createComponent(Withdraw)}/>
+            <Route path="/productlist" component={createComponent(ProductList)}/>
+            <Route path="/myaccount" component={createComponent(MyAccount)}/>
             <Route component={createComponent(NotFound)}/>
         </Switch>
     </div>

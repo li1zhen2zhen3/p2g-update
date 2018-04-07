@@ -25,12 +25,20 @@ const devConfig = {
         }]
     },
     devServer: {
-        port: 8081,
+        port: 3000,
         contentBase: path.join(__dirname, './dist'),
         historyApiFallback: true,
         host: '0.0.0.0',
         proxy: {
-            "/api/*": "http://localhost:8090/$1"
+            "/api/*": "http://localhost:8090/$1",
+            "/v1":{
+                target: "http://localhost:8080/p2g",
+                secure:false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/v1': '/v1'
+                }
+            }
         }
     }
 };

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import style from './Page1.css';
 import { Button } from 'antd';
 import image from './images/0.png';
@@ -15,7 +14,6 @@ export default class Page1 extends Component {
                 <Button type="dashed">Dashed</Button>
                 <Button type="danger">Danger</Button>
             </div>
-
         )
     }
 }

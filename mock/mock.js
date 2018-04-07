@@ -2,7 +2,7 @@
 //
 // let Random = Mock.Random;
 //
-// Mock.mock('/api/user', {
+// Mock.mock('/api/User', {
 //     'name': '@cname',
 //     'intro': '@word(20)'
 // });

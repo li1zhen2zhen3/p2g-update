@@ -1,0 +1,69 @@
+.mainLeaf{
+    background: red;
+    margin-left: 150px;
+  }
+.layout{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 80%;
+  height:960px;
+}
+.myinvesttop{
+  margin:15px;
+}
+.layout .myinvestment{
+  height:200px;
+  width:100%;
+  background: blue; 
+  margin: 10px;
+  padding: 10px;
+}
+.searchInvest Button{
+  margin-left: 15px;
+  margin-top: 15px;
+}
+.layout .myinvestment .content{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.layout .myinvestment .contentTwo{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.events .ant-badge-status {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.notes-month {
+  text-align: center;
+  font-size: 28px;
+}
+.notes-month section {
+  font-size: 28px;
+}
+.partOne{
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 20px;
+  background: blue;
+  padding-left: 30px;
+}
+.settingContent{
+  margin-left: 30px;
+}
+.settingContent label {
+  margin-left: 10px;
+}

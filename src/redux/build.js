@@ -320,7 +320,7 @@ var ActionTypes = {
    *
    * @param {any} [preloadedState] The initial state. You may optionally specify it
    * to hydrate the state from the server in universal apps, or to restore a
-   * previously serialized user session.
+   * previously serialized User session.
    * If you use `combineReducers` to produce the root reducer function, this must be
    * an object with the same shape as `combineReducers` keys.
    *
@@ -434,7 +434,7 @@ var ActionTypes = {
    * middleware will eventually dispatch plain object actions using this method.
    *
    * @param {Object} action A plain object representing “what changed”. It is
-   * a good idea to keep actions serializable so you can record and replay user
+   * a good idea to keep actions serializable so you can record and replay User
    * sessions, or use the time travelling `redux-devtools`. An action must have
    * a `type` property which may not be `undefined`. It is a good idea to use
    * string constants for action types.
@@ -792,7 +792,7 @@ let store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["a" /* createStore */])(_
 
 /*
 * This is a dummy function to check if the function name has been altered by minification.
-* If the function has been minified and NODE_ENV !== 'production', warn the user.
+* If the function has been minified and NODE_ENV !== 'production', warn the User.
 */
 function isCrushed() {}
 
