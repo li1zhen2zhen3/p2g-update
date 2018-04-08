@@ -59,24 +59,22 @@
   font-size: 15px;                
 }
 .homepageBank{
-  height:120px;
   width:78%;
   margin:auto;
   display: flex;
   justify-content: space-between;  
   padding: 0px 60px;
 }
-.homepageBank div{
-  height:120px;
+.homepageBank .home-box{
   width:20%;
-line-height: 120px;
+  height: 200px;
+  display: flex;
+  flex-direction:column;
+  justify-content:center;
 }
-.homepageBank div img{
+.homepageBank .home-box img{
   height:70px;
   width:70px;
-  float:left;  
-  margin-top: 30px;
-
 }
 .intro{
   display: flex;

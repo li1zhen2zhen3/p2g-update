@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import ReactShow from 'react-show';
+import {ReactShow} from 'react-show';
 import { Layout, Menu, Breadcrumb} from 'antd';
 import './Nav.css';
  class Nav extends Component {
@@ -13,13 +13,10 @@ import './Nav.css';
             defaultSelectedKeys={['1']}
             style={{ lineHeight: '40px',float:"right"}}
             >
-            <ReactShow show>
+            {/* <ReactShow > */}
               <Menu.Item key="1"><Link to="/register">注册</Link></Menu.Item>
               <Menu.Item key="2"><Link to="/login">登录</Link></Menu.Item>
-            </ReactShow>
-            <ReactShow>
-            <Menu.Item key="1"><Link to="/login">注销</Link></Menu.Item>
-            </ReactShow>
+              {/* </ReactShow> */}
             <Menu.Item key="3">消息</Menu.Item>
             <Menu.Item key="4">关于我们</Menu.Item>
             <Menu.Item key="5">安全保障</Menu.Item>
