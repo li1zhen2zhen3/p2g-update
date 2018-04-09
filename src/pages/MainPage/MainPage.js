@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Layout, Menu, Breadcrumb, message} from 'antd';
+import { Layout, Menu, Breadcrumb, message } from 'antd';
 import { Carousel, Icon } from 'antd';
+import {Link} from 'react-router';
 import { Button } from 'antd';
 import { BackTop } from 'antd';
 import Nav from 'components/Nav/Nav';
@@ -16,6 +17,7 @@ import image8 from './images/block.jpg';
 import image9 from './images/logoPic.png';
 import { Table } from 'antd';
 import './MainPage.css';
+import history from '../../history';
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -26,15 +28,34 @@ class MainPage extends Component {
     current: 'mail',
   }
   componentDidMount() {
-    fetch('/v1/product/index_list', {//获取首页展示产品列表
-      method: 'GET',
+    var that = this;
+    fetch('/v1/product/getRecommendProductList', {//获取首页展示产品列表
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: {
+        current: 0
+      }
     })
-    .then(response => response.json())
-    .then(data => console.log('data is', data))
-    .catch(error => console.log('error is', error));
-      // .catch(function (error) {
-      //   message.error('获取列表失败');
-      // })
+      .then(function (response) {
+        response.json().then(function (data) {
+          console.log(data);
+          if (data.code == 0) {
+            that.setState({
+              RecommendProductList: data.data,
+            });
+            console.log(data.data);
+          }
+          else {
+            message.error(data.message);
+          }
+        });
+      })
+      .catch(function (error) {
+        message.error('注册失败');
+      })
   }
   handleClick = (e) => {
     console.log('click ', e);
@@ -42,7 +63,16 @@ class MainPage extends Component {
       current: e.key,
     });
   }
+  clickFunction(pid, event) {
+    var path = {
+      pathname:'/productlist',
+      query:pid,
+    }
+    history.push(path);
+  }
   render() {
+    const { RecommendProductList } = this.state;
+    if (RecommendProductList === undefined) return <div>页面正在加载中，请稍后...</div>;
     return (
       <Layout className="mainLeaf">
         <Nav />
@@ -116,133 +146,35 @@ class MainPage extends Component {
           <div className="test">
             <div className="testHead">
               理财产品
-      <a href="#" className="moreProduct">更多理财产品>></a>
+      <a href="/productlist" className="moreProduct">更多理财产品>></a>
             </div>
-
-            <div className="products-box">
-              <div className="product-box">
-                <div className="name-box">普定城投-006     贵州安顺</div>
-                <div className="info-box">
-                  <div className="info">
-                    <div className="upInfo">8.5<span className="up-percent">%</span></div>
-                    <div className="downInfo">预期年化收益率</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">24 <span className="up-percent">个月</span></div>
-                    <div className="downInfo">产品期限</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">100 <span className="up-percent">万元</span></div>
-                    <div className="downInfo">起投金额</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo"><Button type="primary">立即投资</Button></div>
-                    <div className="lastInfo">即时计息，每半年收益，到期回本</div>
+            {
+              RecommendProductList.map(item => (
+                <div className="products-box">
+                  <div className="product-box">
+                    <div className="name-box">{item.project.name}    {item.name}</div>
+                    <div className="info-box">
+                      <div className="info">
+                        <div className="upInfo">{item.yield}<span className="up-percent">%</span></div>
+                        <div className="downInfo">预期年化收益率</div>
+                      </div>
+                      <div className="info">
+                        <div className="upInfo">>{item.duration} <span className="up-percent">个月</span></div>
+                        <div className="downInfo">产品期限</div>
+                      </div>
+                      <div className="info">
+                        <div className="upInfo">{item.miniInvestment} <span className="up-percent">万元</span></div>
+                        <div className="downInfo">起投金额</div>
+                      </div>
+                      <div className="info">
+                        <div className="upInfo"><Button type="primary" onClick={this.clickFunction.bind(this, item.id)}>立即投资</Button></div>
+                        <div className="lastInfo">即时计息，每半年收益，到期回本</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-
-            <div className="products-box">
-              <div className="product-box">
-                <div className="name-box">普定城投-006     贵州安顺</div>
-                <div className="info-box">
-                  <div className="info">
-                    <div className="upInfo">8.5<span className="up-percent">%</span></div>
-                    <div className="downInfo">预期年化收益率</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">24 <span className="up-percent">个月</span></div>
-                    <div className="downInfo">产品期限</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">100 <span className="up-percent">万元</span></div>
-                    <div className="downInfo">起投金额</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo"><Button type="primary">立即投资</Button></div>
-                    <div className="lastInfo">即时计息，每半年收益，到期回本</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <div className="products-box">
-              <div className="product-box">
-                <div className="name-box">普定城投-006     贵州安顺</div>
-                <div className="info-box">
-                  <div className="info">
-                    <div className="upInfo">8.5<span className="up-percent">%</span></div>
-                    <div className="downInfo">预期年化收益率</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">24 <span className="up-percent">个月</span></div>
-                    <div className="downInfo">产品期限</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">100 <span className="up-percent">万元</span></div>
-                    <div className="downInfo">起投金额</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo"><Button type="primary">立即投资</Button></div>
-                    <div className="lastInfo">即时计息，每半年收益，到期回本</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <div className="products-box">
-              <div className="product-box">
-                <div className="name-box">普定城投-006     贵州安顺</div>
-                <div className="info-box">
-                  <div className="info">
-                    <div className="upInfo">8.5<span className="up-percent">%</span></div>
-                    <div className="downInfo">预期年化收益率</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">24 <span className="up-percent">个月</span></div>
-                    <div className="downInfo">产品期限</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">100 <span className="up-percent">万元</span></div>
-                    <div className="downInfo">起投金额</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo"><Button type="primary">立即投资</Button></div>
-                    <div className="lastInfo">即时计息，每半年收益，到期回本</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <div className="products-box">
-              <div className="product-box">
-                <div className="name-box">普定城投-006     贵州安顺</div>
-                <div className="info-box">
-                  <div className="info">
-                    <div className="upInfo">8.5<span className="up-percent">%</span></div>
-                    <div className="downInfo">预期年化收益率</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">24 <span className="up-percent">个月</span></div>
-                    <div className="downInfo">产品期限</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo">100 <span className="up-percent">万元</span></div>
-                    <div className="downInfo">起投金额</div>
-                  </div>
-                  <div className="info">
-                    <div className="upInfo"><Button type="primary">立即投资</Button></div>
-                    <div className="lastInfo">即时计息，每半年收益，到期回本</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+              ))
+            }
 
           </div>
         </Content>
