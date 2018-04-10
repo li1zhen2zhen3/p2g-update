@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Layout, Menu, Breadcrumb, message } from 'antd';
 import { Carousel, Icon } from 'antd';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 import { Button } from 'antd';
 import { BackTop } from 'antd';
 import Nav from 'components/Nav/Nav';
@@ -26,9 +26,16 @@ const { Header, Content, Footer } = Layout;
 class MainPage extends Component {
   state = {
     current: 'mail',
+    accountId:null
   }
   componentDidMount() {
     var that = this;
+    const accountId=sessionStorage.getItem("accountId");
+    if(accountId!=null){
+        that.setState({
+          accountId:accountId
+        })
+    }
     fetch('/v1/product/getRecommendProductList', {//获取首页展示产品列表
       method: 'POST',
       headers: {
@@ -37,24 +44,24 @@ class MainPage extends Component {
       },
       body: {
         current: 0
-      }
+      }      
     })
-      .then(function (response) {
-        response.json().then(function (data) {
-          console.log(data);
-          if (data.code == 0) {
-            that.setState({
-              RecommendProductList: data.data,
-            });
-            console.log(data.data);
-          }
-          else {
-            message.error(data.message);
-          }
-        });
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            if (data.code == 0) {
+              that.setState({
+                RecommendProductList: data.data,
+              });
+            }
+            else {
+              message.error(data.message);
+            }
+          });
+        }
       })
-      .catch(function (error) {
-        message.error('注册失败');
+      .catch((res) => {
+        message.error(res.status);
       })
   }
   handleClick = (e) => {
@@ -64,15 +71,16 @@ class MainPage extends Component {
     });
   }
   clickFunction(pid, event) {
+    var data = { pid: pid };
     var path = {
-      pathname:'/productlist',
-      query:pid,
+      pathname: '/productlist',
+      state: data,
     }
     history.push(path);
   }
   render() {
     const { RecommendProductList } = this.state;
-    if (RecommendProductList === undefined) return <div>页面正在加载中，请稍后...</div>;
+    if (RecommendProductList === undefined) return null;
     return (
       <Layout className="mainLeaf">
         <Nav />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import history from '../../history';
 import { saveState, fetchState } from '../../store';
 import './Login.css';
@@ -26,25 +26,21 @@ class Login extends Component {
     }
 
     handleClick(values) {
-        console.log("aaa");
-        let data = {
-            account: values.userName,
-            password: values.password
-        }
-        saveState(data, 'accountInfo');
-        console.log(fetchState('accountInfo'));
+        const remember=values.remember;
+        const formData = new FormData();
+        formData.append('account', values.userName);
+        formData.append('password', values.password);
         fetch('/v1/account/login', {//注册功能的url地址
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)//传入参数
+            body: formData//传入参数
         })
             .then(function (response) {
                 response.json().then(function (data) {
-                    console.log(data);
                     if (data.code == 0) {
+                        sessionStorage.setItem("accountId",data.data.accountId);
+                        sessionStorage.setItem("token",data.data.token);
                         history.push('/');
                     }
                     else {

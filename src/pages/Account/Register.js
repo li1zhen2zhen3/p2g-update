@@ -95,7 +95,6 @@ class Register extends React.Component {
         //     "varifyCode": values.captcha,
         //     "validatationCodeToken":validatationCodeToken 
         // }
-        console.log(formData);
 
         fetch('/v1/account/inv/register', {//注册功能的url地址
             method: 'POST',
