@@ -1,105 +1,50 @@
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, InputNumber} from 'antd';
 import React, {Component} from 'react';
-import style from './Invest.css';
-import Nav from 'components/Nav/Nav';
+import './Invest.css';
+import NavHeader from 'components/NavHeader/NavHeader';
 
+function onChange(value) {
+    console.log('changed', value);
+  }
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-
-class Pay extends React.Component {
-    state = {
-        confirmDirty: false,
-        autoCompleteResult: [],
-    };
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-                this.handleClick(values);
-            }
-        });
-    }
-    handleClick(values){
-        let data = {
-            pid:values.pid,
-            money:values.money
-        }
-        fetch('/v1/product/investmentProduct',{
-            method:'POST',
-            headers: {
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(data)
-        })
-            .then(function(data){
-                console.log('request succeesed with json response',data)
-            })
-            .catch(function(error){
-                console.log('request failed',error)
-            })
-    };
-
-
+export default class Invest extends React.Component {
     render() {
-        const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
-        const formItemLayout = {
-            labelCol: {
-                xs: {span: 24},
-                //输入框距离左边的距离
-                sm: {span: 9},
-            },
-            wrapperCol: {
-                xs: {span: 24},
-                //输入框的长度
-                sm: {span: 15},
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
-
-
-
         return (
             <div>
-                <Nav/>
-                <div>
-                    <div className="subnav">
-                        投资
-                    </div>
-                    <div className="big">
-                        <div className="wrapper">
-                            <div className="body">
-                                <section className="form">
-                                    <Form onSubmit={this.handleSubmit}>
-                                        <FormItem {...tailFormItemLayout}>
-                                            <Button type="primary" htmlType="submit">确认投资</Button>
-                                        </FormItem>
-                                    </Form>
-                                </section>
+                <NavHeader/>
+                <div className="content">
+                <div className="product">
+                    <div className="products-box">
+                        <div className="product-box">
+                            <div className="name-box">普定城投-006 贵州安顺</div>
+                            <div className="info-box">
+                                <div className="info">
+                                    <div className="upInfo">8.5<span className="up-percent">%</span></div>
+                                    <div className="downInfo">预期年化收益率</div>
+                                </div>
+                                <div className="info">
+                                    <div className="upInfo">24 <span className="up-percent">个月</span></div>
+                                    <div className="downInfo">产品期限</div>
+                                </div>
+                                <div className="info">
+                                    <div className="upInfo">100 <span className="up-percent">万元</span></div>
+                                    <div className="downInfo">起投金额</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div className="detail">
+                    <div>
+                        购买金额：
+                        <span><InputNumber min={1000000} max={2000000} defaultValue={1000000}  onChange={onChange} /></span>元
+                    </div>
+                    <div>
+                    <Button type="primary">立即投资</Button>
+                    </div>
+                </div>
+                </div>
             </div>
-        );
+        )
     }
 }
-
-const WrappedRegistrationForm = Form.create()(Pay);
-
-export default WrappedRegistrationForm;

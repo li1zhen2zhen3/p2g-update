@@ -13,9 +13,9 @@ import Login from 'bundle-loader?lazy&name=down!pages/Account/Login';
 import BindBank from 'bundle-loader?lazy&name=down!pages/Account/BindBank';
 import Pay from 'bundle-loader?lazy&name=down!pages/Account/Pay';
 import Withdraw from 'bundle-loader?lazy&name=down!pages/Account/Withdraw';
-import ProductList from 'bundle-loader?lazy&name=down!pages/Investment/ProductList';
 import MyAccount from 'bundle-loader?lazy&name=down!pages/MyAccount/MyAccount';
-
+import ProductList from 'bundle-loader?lazy&name=down!pages/Investment/ProductList';
+import Invest from 'bundle-loader?lazy&name=down!pages/Investment/Invest'
 
 const createComponent = (component) => () => (
     <Bundle load={component}>
@@ -36,6 +36,7 @@ export default () => (
             <Route path="/pay" component={createComponent(Pay)}/>
             <Route path="/withdraw" component={createComponent(Withdraw)}/>
             <Route path="/productlist" component={createComponent(ProductList)}/>
+            <Route path="/invest" component={createComponent(Invest)}/>
             <Route path="/myaccount" component={createComponent(MyAccount)}/>
             <Route component={createComponent(NotFound)}/>
         </Switch>

@@ -4,13 +4,23 @@ import {ReactShow} from 'react-show';
 import { Layout, Menu, Breadcrumb} from 'antd';
 import './Nav.css';
  class Nav extends Component {
+    state = {
+        current: '',
+      }
+      handleClick = (e) => {
+        console.log('click ', e);
+        this.setState({
+          current: e.key,
+        });
+      }
     render() {
         return (
             <div className="header-box">
             <Menu
             theme="light"
             mode="horizontal"
-            defaultSelectedKeys={['1']}
+            onClick={this.handleClick}
+            selectedKeys={this.state.current}
             style={{ lineHeight: '40px',float:"right"}}
             >
             {/* <ReactShow > */}
