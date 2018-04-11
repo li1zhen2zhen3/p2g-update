@@ -29,7 +29,7 @@ class Login extends Component {
     handleClick(values) {
         const remember=values.remember;
         const formData = new FormData();
-        formData.append('account', values.userName);
+        formData.append('mobile', values.userName);
         formData.append('password', values.password);
         fetch('/v1/account/inv/login', {//注册功能的url地址
             method: 'POST',
@@ -50,7 +50,7 @@ class Login extends Component {
                 });
             })
             .catch(function (error) {
-                message.error('注册失败');
+                message.error('未知异常');
             })
     };
     render() {
