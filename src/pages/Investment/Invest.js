@@ -1,7 +1,7 @@
 import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, InputNumber,message} from 'antd';
 import React, {Component} from 'react';
 import './Invest.css';
-import NavHeader from 'components/NavHeader/NavHeader';
+import NavHeader from 'components/Nav/Nav';
 
 function onChange(value) {
     this.setState({

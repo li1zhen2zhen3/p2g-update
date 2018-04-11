@@ -14,7 +14,7 @@
      height:40px;
     background:#F9F9F9;
     z-index: 999;
-    textAlign:right;
+    text-align:right;
     margin:auto
 }
 .ant-carousel .slick-slide {

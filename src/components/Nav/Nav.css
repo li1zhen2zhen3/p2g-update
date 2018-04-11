@@ -2,6 +2,19 @@
   	width: 60%;
     height:40px;
     z-index: 999;
-    textAlign:right;
-    margin:auto
+    text-align:right;
+    margin:auto;
+    margin-bottom: 30px;
+}
+.header-box .contentBox{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+.headd-box{
+  font-size: 24px;
+  line-height: 50px;
+  width: 500px;
+  text-align: left;
 }

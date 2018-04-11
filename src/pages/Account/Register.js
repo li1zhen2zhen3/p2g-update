@@ -144,7 +144,7 @@ class Register extends React.Component {
                     offset: 0,
                 },
                 sm: {
-                    span: 16,
+                    span: 24,
                     offset: 8,
                 },
             },
@@ -201,7 +201,7 @@ class Register extends React.Component {
                                     {...formItemLayout}
                                     label="验证码"
                                 >
-                                    <Row gutter={8}>
+                                    <Row gutter={8}>       
                                         <Col span={12}>
                                             {getFieldDecorator('captcha', {
                                                 rules: [{ required: true, message: '请输入您收到的验证码!' }],
@@ -246,11 +246,20 @@ class Register extends React.Component {
                                     {getFieldDecorator('agreement', {
                                         valuePropName: 'checked',
                                     })(
+                                        <Row gutter={8}>
+                                <Col span={2}/>
+                                <Col span={6}>
                                         <Checkbox>我已阅读并同意 <a href="">《用户协议》</a></Checkbox>
+                                        </Col>
+                                </Row>
                                     )}
                                 </FormItem>
-                                <FormItem {...tailFormItemLayout}>
-                                    <Button type="primary" htmlType="submit">立即注册</Button>
+                                <FormItem {...tailFormItemLayout} style={{textAlign:'center'}}>
+                                <Row gutter={8}>
+                                <Col span={5} offset={2}>
+                                    <Button type="primary" htmlType="submit" style={{background:'red', textAlign:'center',width:'200px'}}>立即注册</Button>
+                                </Col>
+                                </Row>
                                 </FormItem>
                             </Form>
                         </section>

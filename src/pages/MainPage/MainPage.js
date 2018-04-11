@@ -82,10 +82,10 @@ class MainPage extends Component {
     if (RecommendProductList === undefined) return null;
     return (
       <Layout className="mainLeaf">
-        <Nav />
+        <Nav/>
         <Content style={{ padding: '10 50px' }}>
-          <div className="contentBox">
-            <div className="test-box"> <img src={image9} /></div>
+          {/* <div className="contentBox"> */}
+            {/* <div className="test-box"> <img src={image9} /></div>
             <div>
               <Menu className="menu"
                 onClick={this.handleClick}
@@ -105,8 +105,8 @@ class MainPage extends Component {
                   <Icon type="mail" />我的账户
       </Menu.Item>
               </Menu>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
           <Carousel autoplay>
             <div><img src={image1} /></div>
             <div><img src={image2} /></div>

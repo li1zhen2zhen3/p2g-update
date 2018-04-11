@@ -5,6 +5,7 @@ import { saveState, fetchState } from '../../store';
 import './Login.css';
 import Nav from 'components/Nav/Nav';
 
+
 const FormItem = Form.Item;
 
 class Login extends Component {
@@ -90,7 +91,7 @@ class Login extends Component {
                                         <Button type="primary" htmlType="submit" className="login-form-button" >
                                             登录
                                     </Button>
-                                        Or <a href="">立即注册!</a>
+                                        Or <a href="/register">立即注册!</a>
                                     </FormItem>
                                 </Form>
                             </section>

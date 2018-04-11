@@ -5,7 +5,7 @@ import { Layout, Menu, Breadcrumb, message } from 'antd';
 import { Carousel, Icon } from 'antd';
 import { Button } from 'antd';
 import { BackTop } from 'antd';
-import NavHeader from 'components/NavHeader/NavHeader';
+import NavHeader from 'components/Nav/Nav';
 import Tablea from 'components/Tablea/Tablea';
 import TableGet from 'components/Tablea/TableGet';
 import './ProductList.css';
@@ -23,16 +23,12 @@ const { Header, Content, Footer } = Layout;
 export default class ProductList extends Component {
     state = {
         current: 'mail',
+        pid: sessionStorage.getItem('pid')
     }
     componentDidMount() {
-        var that = this;
-        const pid = sessionStorage.getItem("pid");
-        that.setState({
-            pid:pid
-        })
+        const { pid } = this.state;
         const formData = new FormData();
         formData.append('pid', pid);
-        sessionStorage.removeItem("pid");
         fetch('/v1/product/getProductByPId', {//获取首页展示产品列表
             method: 'POST',
             headers: {
@@ -43,7 +39,7 @@ export default class ProductList extends Component {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.code == 0) {
-                            that.setState({
+                            this.setState({
                                 productDetail: data.data,
                             });
                             console.log(data.data);
@@ -111,7 +107,7 @@ export default class ProductList extends Component {
                                         <div className="downInfo">起投金额</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo"><InputNumber min={10000} max={20000} defaultValue={10000} onChange={onChange} /></div>
+                                        <div className="upInfo"><InputNumber min={10000} max={20000} defaultValue={10000} onChange={this.onChange} /></div>
                                         <div className="lastInfo">即时计息，每半年收益，到期回本</div>
                                     </div>
                                     <div className="info">
@@ -123,7 +119,7 @@ export default class ProductList extends Component {
                     </div>
 
                     <div className="detail">
-                        <Tabs defaultActiveKey="1" onChange={callback}>
+                        <Tabs defaultActiveKey="1" onChange={this.callback}>
                             <TabPane tab="项目介绍" key="1">
                                 <div className="introDiv">
                                     <div className="title">项目简介</div>

@@ -15,7 +15,9 @@ import Pay from 'bundle-loader?lazy&name=down!pages/Account/Pay';
 import Withdraw from 'bundle-loader?lazy&name=down!pages/Account/Withdraw';
 import MyAccount from 'bundle-loader?lazy&name=down!pages/MyAccount/MyAccount';
 import ProductList from 'bundle-loader?lazy&name=down!pages/Investment/ProductList';
-import Invest from 'bundle-loader?lazy&name=down!pages/Investment/Invest'
+import Invest from 'bundle-loader?lazy&name=down!pages/Investment/Invest';
+import SetTransPwd from 'bundle-loader?lazy&name=down!pages/Account/SetTransPwd';
+import Transfer from 'bundle-loader?lazy&name=down!pages/Transfer/Transfer';
 
 const createComponent = (component) => () => (
     <Bundle load={component}>
@@ -38,6 +40,8 @@ export default () => (
             <Route path="/productlist" component={createComponent(ProductList)}/>
             <Route path="/invest" component={createComponent(Invest)}/>
             <Route path="/myaccount" component={createComponent(MyAccount)}/>
+            <Route path="/setPwd" component={createComponent(SetTransPwd)}/>
+            <Route path="/transfer" component={createComponent(Transfer)}/>
             <Route component={createComponent(NotFound)}/>
         </Switch>
     </div>

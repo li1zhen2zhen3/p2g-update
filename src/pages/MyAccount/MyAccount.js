@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Tabs, Layout, Button,Calendar, DatePicker, Table, Row, Col } from 'antd';
 import styles from './style.css';
-import NavHeader from '../../components/NavHeader/NavHeader';
+import Nav from '../../components/Nav/Nav';
 
 const TabPane = Tabs.TabPane;
 const { Header, Footer, Sider, Content } = Layout;
@@ -58,8 +58,9 @@ export default class MyAccount extends Component {
       }
     render(){
         return (
-          <div className="mainLeaf">
-            <NavHeader/>
+          <div>
+          <Nav/>
+          <div className="mainLeaf1">
             <Tabs defaultActiveKey="1" onChange={this.callback}>
               <TabPane tab="账户纵览" key="1">
               <div className="layout">
@@ -244,6 +245,7 @@ export default class MyAccount extends Component {
                 </div>
               </TabPane>
             </Tabs>
+          </div>
           </div>
         );
     }
