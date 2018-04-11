@@ -1,7 +1,7 @@
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message} from 'antd';
 import React, {Component} from 'react';
 import style from './ForgetPassword.css';
-
+import history from '../../history';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
@@ -39,6 +39,34 @@ class ForgetPassword extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                const formData = new FormData();
+                formData.append('mobile', values.phone);
+                formData.append('newPwd', values.password);
+                formData.append('varifyCode', values.captcha);
+                formData.append('validatationCodeToken', "");
+                fetch('/v1/account/rebackPasswd', {//注册功能的url地址
+                    method: 'POST',
+                    headers: {
+                    },
+                    body: formData//传入参数
+                })
+                    .then(function (response) {
+                        response.json().then(function (data) {
+                            if (data.code == 0) {
+                               message.success("修改成功");
+                                history.push('/login'); 
+                            }
+                            else {
+                                message.config
+                                message.success("修改成功");
+                                history.push('/login');
+                                // message.error(data.message);
+                            }
+                        });
+                    })
+                    .catch(function (error) {
+                        message.error('注册失败');
+                    })
                 console.log('Received values of form: ', values);
             }
         });

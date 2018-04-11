@@ -71,10 +71,9 @@ class MainPage extends Component {
     });
   }
   clickFunction(pid, event) {
-    var data = { pid: pid };
+    sessionStorage.setItem("pid",pid);
     var path = {
-      pathname: '/productlist',
-      state: data,
+      pathname: '/productlist',      
     }
     history.push(path);
   }

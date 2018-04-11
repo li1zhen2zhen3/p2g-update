@@ -30,7 +30,7 @@ class Login extends Component {
         const formData = new FormData();
         formData.append('account', values.userName);
         formData.append('password', values.password);
-        fetch('/v1/account/login', {//注册功能的url地址
+        fetch('/v1/account/inv/login', {//注册功能的url地址
             method: 'POST',
             headers: {
             },

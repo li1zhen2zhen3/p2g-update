@@ -12,16 +12,23 @@ function onChange(value) {
 
 export default class Invest extends React.Component {
     state = {
-        investValue: 10000,
     }
     componentDidMount() {
         var that = this;
-        fetch('/v1/product/getProductByPId?pid=25', {//获取首页展示产品列表
+        const investValue=sessionStorage.getItem("investValue");
+        that.setState({
+            investValue:investValue
+        })
+        const pid=sessionStorage.getItem("pid");
+        const formData = new FormData();
+        formData.append('pid', pid);
+        sessionStorage.removeItem("investValue");
+        sessionStorage.removeItem("pid");
+        fetch('/v1/product/getProductByPId', {//获取首页展示产品列表
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
+            body:formData
         })
             .then((response) => {
                 if (response.ok) {
@@ -45,20 +52,18 @@ export default class Invest extends React.Component {
     investProduct(pid,investValue){
         const accountId = sessionStorage.getItem("accountId");
         const token = sessionStorage.getItem("token");
+        const formData = new FormData();
+        formData.append('pid', pid);
+        formData.append('accountId', accountId);
+        formData.append('money', investValue);
+        formData.append('tpwd', "");
+        formData.append('token', token);
         var that = this;
         fetch('/v1/product/investmentProduct', {//获取首页展示产品列表
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
-            body:{
-                pid:pid,
-                accountId:accountId,
-                money:investValue,
-                tpwd:'',
-                token:token
-            }
+            body:formData
         })
             .then((response) => {
                 if (response.ok) {

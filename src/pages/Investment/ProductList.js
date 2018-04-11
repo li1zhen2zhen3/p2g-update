@@ -11,7 +11,7 @@ import TableGet from 'components/Tablea/TableGet';
 import './ProductList.css';
 import image9 from '../MainPage/images/logoPic.png';
 import { Tabs, InputNumber } from 'antd';
-import {Loading} from '../../components/Loading/Loading'
+import { Loading } from '../../components/Loading/Loading'
 
 
 const TabPane = Tabs.TabPane;
@@ -19,22 +19,6 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const { Header, Content, Footer } = Layout;
 
-function callback(key) {
-    console.log(key);
-    if (key = 1) {
-
-    } else if (key == 2) {
-
-    }
-}
-function onChange(value) {
-    var data = { investValue: value };
-    var path = {
-        pathname: '/invest',
-        state: data,
-    };
-    history.push(path);
-}
 
 export default class ProductList extends Component {
     state = {
@@ -42,12 +26,18 @@ export default class ProductList extends Component {
     }
     componentDidMount() {
         var that = this;
-        fetch('/v1/product/getProductByPId?pid=25', {//获取首页展示产品列表
+        const pid = sessionStorage.getItem("pid");
+        that.setState({
+            pid:pid
+        })
+        const formData = new FormData();
+        formData.append('pid', pid);
+        sessionStorage.removeItem("pid");
+        fetch('/v1/product/getProductByPId', {//获取首页展示产品列表
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
+            body: formData
         })
             .then((response) => {
                 if (response.ok) {
@@ -75,10 +65,26 @@ export default class ProductList extends Component {
         });
     }
 
+    callback = (key) => {
+        console.log(key);
+        if (key = 1) {
+    
+        } else if (key == 2) {
+    
+        }
+    }
+    onChange = (value) => {
+        sessionStorage.setItem("investValue",value);
+        sessionStorage.setItem("pid",this.state.pid);
+        var path = {
+            pathname: '/invest',
+        };
+        history.push(path);
+    }
 
     render() {
-        const { productDetail,loading } = this.state;
-        if (productDetail===undefined) return null;
+        const { productDetail, loading } = this.state;
+        if (productDetail === undefined) return null;
         return (
             <Layout className="mainLeaf">
                 <NavHeader />
