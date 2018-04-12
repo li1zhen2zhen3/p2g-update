@@ -19,6 +19,8 @@ import Invest from 'bundle-loader?lazy&name=down!pages/Investment/Invest';
 import SetTransPwd from 'bundle-loader?lazy&name=down!pages/Account/SetTransPwd';
 import Transfer from 'bundle-loader?lazy&name=down!pages/Transfer/Transfer';
 import Product from 'bundle-loader?lazy&name=down!pages/Investment/Product';
+import MessageList from 'bundle-loader?lazy&name=down!pages/Message/MessageList';
+
 
 const createComponent = (component) => () => (
     <Bundle load={component}>
@@ -44,6 +46,7 @@ export default () => (
             <Route path="/setPwd" component={createComponent(SetTransPwd)}/>
             <Route path="/transfer" component={createComponent(Transfer)}/>
             <Route path="/product" component={createComponent(Product)}/>
+            <Route path="/message" component={createComponent(MessageList)}/>
             <Route component={createComponent(NotFound)}/>
         </Switch>
     </div>

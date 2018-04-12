@@ -1,0 +1,11 @@
+.big{
+  border:1px solid #fafafa;
+  position: relative;
+  margin:40px 150px 40px 150px;
+}
+.page{
+  margin-top:5px;
+  position:relative;
+  bottom: -25px;
+  left:900px;
+}
