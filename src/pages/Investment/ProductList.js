@@ -115,7 +115,7 @@ export default class ProductList extends Component {
                                         <div className="downInfo">起投金额</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo" style={{fontSize:'15px'}}>实付金额：<InputNumber min={10000} max={20000} value={this.state.investValue} onChange={this.handleValueChange} /></div>
+                                        <div className="upInfo" style={{fontSize:'15px'}}>实付金额：<InputNumber min={10000} value={this.state.investValue} onChange={this.handleValueChange} /></div>
                                        <div></div>
                                         <div className="lastInfo">即时计息，每半年收益，到期回本</div>
                                     </div>

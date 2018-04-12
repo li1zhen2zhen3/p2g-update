@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import './Invest.css';
 import NavHeader from 'components/Nav/Nav';
+import history from '../../history';
 
 const FormItem = Form.Item;
 
@@ -105,9 +106,11 @@ class Invest extends React.Component {
                         if (data.code == 0) {                           
                             console.log(data.data);
                             message.success("投资成功");
+                            history.push('/product');
                         }
                         else {
                             message.error(data.message);
+                            history.push('/pay');
                         }
                     });
                 }
@@ -177,7 +180,7 @@ class Invest extends React.Component {
                     required: true
                   }]
                 })(
-                    <InputNumber min={10000} max={20000} onChange={this.handleValueChange} />
+                    <InputNumber min={10000} onChange={this.handleValueChange} />
                 )}
                 </FormItem>
                 <FormItem

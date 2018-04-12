@@ -1,6 +1,7 @@
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message} from 'antd';
 import React, {Component} from 'react';
-import style from './BindBank.css';
+import history from '../../history';
+import style from './pay.css';
 import Nav from 'components/Nav/Nav';
 
 
@@ -17,30 +18,37 @@ class Pay extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 this.handleClick(values);
             }
         });
     }
     handleClick(values){
-        let data = {
-            uid:values.bankcard,
-            money:values.money
-        }
+        const formData = new FormData();
+        formData.append('uid',sessionStorage.getItem('accountId'));
+        formData.append('transaction-password',values.transPwd);
+        formData.append('money', values.money);
+        formData.append('token',sessionStorage.getItem('token'));
         fetch('/v1/account/recharge',{//注册功能的url地址
             method:'POST',
             headers: {
-                'Accept':'application/json',
-                'Content-Type':'application/json'
             },
-            body:JSON.stringify(data)//传入参数
+            body:formData//传入参数
         })
-            .then(function(data){
-                console.log('request succeesed with json response',data)
-            })
-            .catch(function(error){
-                console.log('request failed',error)
-            })
+        .then(function (response) {
+            response.json().then(function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    message.success("充值成功");
+                    history.push('/product');
+                }
+                else {
+                    message.error(data.message);
+                }
+            });
+        })
+        .catch(function (error) {
+            message.error('未知异常');
+        })
     };
 
 
@@ -51,19 +59,19 @@ class Pay extends React.Component {
             labelCol: {
                 xs: {span: 24},
                 //输入框距离左边的距离
-                sm: {span: 9},
+                sm: {span: 4,offset:6},
             },
             wrapperCol: {
                 xs: {span: 24},
                 //输入框的长度
-                sm: {span: 15},
+                sm: {span: 6},
             },
         };
         const tailFormItemLayout = {
             wrapperCol: {
                 xs: {
-                    span: 24,
-                    offset: 0,
+                    span: 21,
+                    offset: 3,
                 },
                 sm: {
                     span: 16,
@@ -81,22 +89,22 @@ class Pay extends React.Component {
                     {/* <div className="subnav">
                         充值
                     </div> */}
-                    <div className="big">
-                        <div className="wrapper">
-                            <div className="body">
-                                <header className="header">充值</header>
-                                <section className="form">
+                    <div className="big8">
+                        <div className="wrapper8">
+                            <div className="body8">
+                                <header className="headerOne8">充值</header>
+                                <section className="form8">
                                     <Form onSubmit={this.handleSubmit}>
                                         <FormItem
                                             {...formItemLayout}
-                                            label="银行卡号"
+                                            label="用户交易密码"
                                         >
-                                            {getFieldDecorator('bankcard', {
+                                            {getFieldDecorator('transPwd', {
                                                 rules: [{
-                                                    required: true, message: '请输入您的银行卡号!',
+                                                    required: true, message: '请输入交易密码!',
                                                 }],
                                             })(
-                                                <Input type="password" placeholder="请输入储蓄卡卡号"/>
+                                                <Input type="password" placeholder="请输入交易密码"/>
                                             )}
                                         </FormItem>
                                         <FormItem
@@ -106,11 +114,11 @@ class Pay extends React.Component {
                                             {getFieldDecorator('money', {
                                                 rules: [{required: true, message: '请输入您需要充值的金额!'}],
                                             })(
-                                                <Input placeholder="请输入充值金额"/>
+                                                <Input placeholder="请输入充值金额（精确到分"/>
                                             )}
                                         </FormItem>
                                         <FormItem {...tailFormItemLayout}>
-                                            <Button type="primary" htmlType="submit">充值</Button>
+                                            <Button type="primary" htmlType="submit" className="login-form-button8" style={{marginLeft:'90px'}}>充值</Button>
                                         </FormItem>
                                     </Form>
                                 </section>

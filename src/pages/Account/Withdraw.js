@@ -1,36 +1,13 @@
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message} from 'antd';
 import React, {Component} from 'react';
-import style from './BindBank.css';
+import history from '../../history';
+import style from './Widthdraw.css';
 import Nav from 'components/Nav/Nav';
 
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
-
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
 
 class Withdraw extends React.Component {
     state = {
@@ -41,39 +18,39 @@ class Withdraw extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                this.handleClick(values);
             }
         });
     }
-    handleConfirmBlur = (e) => {
-        const value = e.target.value;
-        this.setState({confirmDirty: this.state.confirmDirty || !!value});
-    }
-    checkPassword = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
-        } else {
-            callback();
-        }
-    }
-    checkConfirm = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && this.state.confirmDirty) {
-            form.validateFields(['confirm'], {force: true});
-        }
-        callback();
-    }
+    handleClick(values){
+        const formData = new FormData();
+        formData.append('uid',sessionStorage.getItem('accountId'));
+        formData.append('transaction-password',values.transPwd);
+        formData.append('money', values.money);
+        formData.append('token',sessionStorage.getItem('token'));
+        fetch('/v1/account/withdrawDeposit',{//注册功能的url地址
+            method:'POST',
+            headers: {
+            },
+            body:formData//传入参数
+        })
+        .then(function (response) {
+            response.json().then(function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    message.success("提现成功");
+                    history.push('/myaccount');
+                }
+                else {
+                    message.error(data.message);
+                }
+            });
+        })
+        .catch(function (error) {
+            message.error('未知异常');
+        })
+    };
 
-    handleWebsiteChange = (value) => {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({autoCompleteResult});
-    }
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -82,19 +59,19 @@ class Withdraw extends React.Component {
             labelCol: {
                 xs: {span: 24},
                 //输入框距离左边的距离
-                sm: {span: 9},
+                sm: {span: 4,offset:6},
             },
             wrapperCol: {
                 xs: {span: 24},
                 //输入框的长度
-                sm: {span: 15},
+                sm: {span: 6},
             },
         };
         const tailFormItemLayout = {
             wrapperCol: {
                 xs: {
-                    span: 24,
-                    offset: 0,
+                    span: 21,
+                    offset: 3,
                 },
                 sm: {
                     span: 16,
@@ -102,65 +79,43 @@ class Withdraw extends React.Component {
                 },
             },
         };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select style={{width: 70}}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        );
-
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
-
         return (
             <div>
                 <Nav/>
                 <div>
                     {/* <div className="subnav">
-                        提现
+                        充值
                     </div> */}
-                    <div className="big">
-                        <div className="wrapper">
-                            <div className="body">
-                                <header className="header">提现</header>
-                                <section className="form">
+                    <div className="big6">
+                        <div className="wrapper6">
+                            <div className="body6">
+                                <header className="headerOne6">提现</header>
+                                <section className="form6">
                                     <Form onSubmit={this.handleSubmit}>
                                         <FormItem
                                             {...formItemLayout}
-                                            label="可用余额"
+                                            label="用户交易密码"
                                         >
-                                        </FormItem>
-                                        <FormItem
-                                            {...formItemLayout}
-                                            label="银行卡号"
-                                        >
-                                            {getFieldDecorator('password', {
+                                            {getFieldDecorator('transPwd', {
                                                 rules: [{
-                                                    required: true, message: '请输入您的银行卡号!',
-                                                }, {
-                                                    validator: this.checkConfirm,
+                                                    required: true, message: '请输入交易密码!',
                                                 }],
                                             })(
-                                                <Input type="password" placeholder="请输入储蓄卡卡号"/>
+                                                <Input type="password" placeholder="请输入交易密码"/>
                                             )}
                                         </FormItem>
                                         <FormItem
                                             {...formItemLayout}
-                                            label="充值金额"
+                                            label="提现金额"
                                         >
-                                            {getFieldDecorator('captcha', {
-                                                rules: [{required: true, message: '请输入您需要充值的金额!'}],
+                                            {getFieldDecorator('money', {
+                                                rules: [{required: true, message: '请输入您需要提现的金额!'}],
                                             })(
-                                                <Input placeholder="请输入充值金额"/>
+                                                <Input placeholder="请输入提现金额（精确到分"/>
                                             )}
                                         </FormItem>
-
-
                                         <FormItem {...tailFormItemLayout}>
-                                            <Button type="primary" htmlType="submit">充值</Button>
+                                            <Button type="primary" htmlType="submit" className="login-form-button6" style={{marginLeft:'90px'}}>提现</Button>
                                         </FormItem>
                                     </Form>
                                 </section>

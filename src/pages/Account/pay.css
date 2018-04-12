@@ -1,17 +1,17 @@
-.login-form6 {
+.login-form8 {
   max-width: 500px;
   margin:0 auto;
 }
-.login-form-forgot6 {
+.login-form-forgot8 {
   float: right;
 }
-.login-form-button6 {
+.login-form-button8 {
   width: 20%;
   text-align:center;
   background: red;
 }
 
-.wrapper6 {
+.wrapper8 {
   /* height: 500px; */
   width: 100%;
   display: flex;
@@ -19,15 +19,14 @@
   justify-content: center;
 }
 
-.body6 {
-  width: 50%;
+.body8 {
+  width: 80%;
   box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, .3);
   height: 500px;
   margin-top: 30px;
-  margin: auto;
 }
 
-.headerOne6 {
+.headerOne8 {
   color: #fff;
   font-size: 24px;
   padding: 30px 20px;
@@ -36,7 +35,7 @@
   width:auto;
 }
 
-.form6 {
+.form8 {
   margin-top: 12px;
   padding: 24px;
 }

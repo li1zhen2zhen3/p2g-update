@@ -16,6 +16,31 @@ class Login extends Component {
             password: ""
         }
     }
+    getBankAccount = () => {
+        const formData = new FormData(); 
+        formData.append('accountId',sessionStorage.getItem('accountId'));
+        formData.append('token',sessionStorage.getItem('token'));
+        fetch('/v1/account/getInvTransactionInfo', {//注册功能的url地址
+            method: 'POST',
+            headers: {
+            },
+            body: formData//传入参数
+        })
+            .then(function (response) {
+                response.json().then(function (data) {
+                    if (data.code == 0) {
+                        history.push('/');                                                
+                    }
+                    else {
+                        history.push('/bindbank');
+                        
+                    }
+                });
+            })
+            .catch(function (error) {
+                message.error('未知异常');
+            })
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -27,6 +52,7 @@ class Login extends Component {
     }
 
     handleClick(values) {
+        const that = this;
         const remember=values.remember;
         const accountMobile=values.userName;
         const formData = new FormData();
@@ -44,7 +70,7 @@ class Login extends Component {
                         sessionStorage.setItem("accountMobile",accountMobile);
                         sessionStorage.setItem("accountId",data.data.accountId);
                         sessionStorage.setItem("token",data.data.token);
-                        history.push('/bindbank');
+                        that.getBankAccount();
                     }
                     else {
                         message.error(data.message);
