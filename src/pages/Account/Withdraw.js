@@ -119,9 +119,9 @@ class Withdraw extends React.Component {
             <div>
                 <Nav/>
                 <div>
-                    <div className="subnav">
+                    {/* <div className="subnav">
                         提现
-                    </div>
+                    </div> */}
                     <div className="big">
                         <div className="wrapper">
                             <div className="body">

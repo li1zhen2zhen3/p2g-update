@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Tabs, Layout, Button, Calendar, DatePicker, Table, Row, Col, Modal } from 'antd';
+import { Tabs, Layout, Button, Calendar, DatePicker, Table, Row, Col, Modal,message } from 'antd';
+import { Link } from 'react-router-dom';
 import styles from './style.css';
 import Nav from '../../components/Nav/Nav';
-
+import history from '../../history';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const { Header, Footer, Sider, Content } = Layout;
@@ -49,6 +50,7 @@ const data = [{
 
 export default class MyAccount extends Component {
   state = {
+    bindStatus:false
   }
   componentDidMount() {
     var that = this;
@@ -88,11 +90,44 @@ export default class MyAccount extends Component {
           }
         })
         .catch(function (error) {
-          message.error('注册失败');
+          message.error('未知异常');
         })
     }
   }
   callback = (key) => {
+    if (key == 3) {
+      var that = this;
+      const formData = new FormData();
+      formData.append('uid', accountId);
+      formData.append('token', token);
+      formData.append('pageNo', 0);
+      formData.append('numPerPage', 10);
+      fetch('/v1/account/fundRecord', {//注册功能的url地址
+        method: 'POST',
+        headers: {
+        },
+        body: formData
+      })
+        .then(function (response) {
+          if (response.ok) {
+            response.json().then(function (data) {
+              console.log(data);
+              if (data.code == 0) {
+                that.setState({
+                  fundRecordList: data.data
+                })
+                console.log(data.data);
+              }
+              else {
+                message.error(data.message);
+              }
+            });
+          }
+        })
+        .catch(function (error) {
+          message.error('注册失败');
+        })
+    }
     console.log(key);
   }
   onPanelChange = (value, mode) => {
@@ -101,7 +136,46 @@ export default class MyAccount extends Component {
   onChange = (date, dateString) => {
     console.log(date, dateString);
   }
+  handleUnBund = () => {
+    confirm({
+      title: '警告',
+      content: '确定解绑吗？',
+      onOk() {
+        const formData = new FormData();
+        const accountId = sessionStorage.getItem("accountId");
+        const token = sessionStorage.getItem("token");
+        formData.append('uid', accountId);
+        formData.append('token', token);
+        fetch('/v1/account/unbunding', {//注册功能的url地址
+          method: 'POST',
+          headers: {
+          },
+          body: formData
+        })
+          .then(function (response) {
+            if (response.ok) {
+              response.json().then(function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                  console.log(data.data);
+                  message.success("解绑成功");
+                  history.push("myaccount");
+                }
+                else {
+                  message.error(data.message);
+                }
+              });
+            }
+          })
+          .catch(function (error) {
+            message.error('未知异常');
+          })
+      },
+      onCancel() { }
+    });
+  }
   render() {
+    const {bindStatus, fundRecordList } = this.state;
     return (
       <div>
         <Nav />
@@ -237,8 +311,8 @@ export default class MyAccount extends Component {
                       <div style={{ fontSize: '25px' }}>2.00</div>
                     </div>
                     <div>
-                      <Button type="primary" size="large" style={{ width: '100px' }}>充值</Button>
-                      <Button type="default" size="large" style={{ marginLeft: '20px', width: '100px' }}>提现</Button>
+                      <Button type="primary" size="large" style={{ width: '100px' }}><Link to="/pay">充值</Link></Button>
+                      <Button type="default" size="large" style={{ marginLeft: '20px', width: '100px' }}><Link to="/withdraw">提现</Link></Button>
                     </div>
                   </div>
                 </div>
@@ -266,19 +340,20 @@ export default class MyAccount extends Component {
             <TabPane tab="账户设置" key="5">
               <div className="myinvesttop">
                 <span style={{ fontSize: '20px' }}>我的账户</span>
-                <Tabs defaultActiveKey="11" tabBarStyle={{ float: 'right' }}>
+                <Tabs defaultActiveKey="11">
                   <TabPane tab="身份认证" key="11">
                     <div className="layout">
                       <div className="myinvestment">
                         <div className="myinvesttop">
                           <span style={{ fontSize: '18px' }}>银行存管账户</span>
                           <span style={{ marginLeft: '10px' }}>(资金第三方保全认证，保障您的资金安全，核实您的有效身份。)</span>
-                          <span style={{ float: 'right' }}> 已开通</span>
+                          <span style={{ float: 'right' }}> {bindStatus?"已开通":"未开通"}</span>
                         </div>
-                        <div>
+
+                        <div style={{display:bindStatus?'':'none'}}>
                           <Row>
-                            <Col span={4} style={{ textAlign: 'right' }}>银行卡号：</Col>
-                            <Col span={8}>62284783898202885171</Col>
+                            <Col span={12}>银行卡号：</Col>
+                            <Col span={12}>62284783898202885171</Col>
                           </Row>
                           <Row>
                             <Col span={12}>持卡人：</Col>
@@ -290,8 +365,11 @@ export default class MyAccount extends Component {
                           </Row>
                           <Row>
                             <Col span={12}>银行卡状态：</Col>
-                            <Col span={12}>已绑定</Col>
+                            <Col span={12}>已绑定 <a onClick={this.handleUnBund}>解绑</a></Col>
                           </Row>
+                        </div>
+                        <div style={{marginTop:'50px',marginLeft:'15px',display:bindStatus?'none':''}}>
+                        <Button type="primary" size="large" style={{ width: '200px' }}><Link to="/pay">绑定银行卡</Link></Button>
                         </div>
                       </div>
                     </div>

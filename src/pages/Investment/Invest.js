@@ -52,7 +52,7 @@ class Invest extends React.Component {
         })
         console.log('changed', value);
       }
-    investProduct(pid,investValue){
+    investProduct=(pid,investValue)=>{
         const accountId = sessionStorage.getItem("accountId");
         const token = sessionStorage.getItem("token");
         const formData = new FormData();
@@ -88,6 +88,7 @@ class Invest extends React.Component {
     choice = () => {
 
     }
+   
     render() {
         const {investValue, productDetails } = this.state;
         const { getFieldDecorator} = this.props.form;

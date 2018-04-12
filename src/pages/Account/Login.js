@@ -28,8 +28,9 @@ class Login extends Component {
 
     handleClick(values) {
         const remember=values.remember;
+        const accountMobile=values.userName;
         const formData = new FormData();
-        formData.append('mobile', values.userName);
+        formData.append('mobile', accountMobile);
         formData.append('password', values.password);
         fetch('/v1/account/inv/login', {//注册功能的url地址
             method: 'POST',
@@ -40,6 +41,7 @@ class Login extends Component {
             .then(function (response) {
                 response.json().then(function (data) {
                     if (data.code == 0) {
+                        sessionStorage.setItem("accountMobile",accountMobile);
                         sessionStorage.setItem("accountId",data.data.accountId);
                         sessionStorage.setItem("token",data.data.token);
                         history.push('/');

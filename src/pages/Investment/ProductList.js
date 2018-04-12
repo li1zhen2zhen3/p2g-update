@@ -89,6 +89,7 @@ export default class ProductList extends Component {
         const { productDetail, loading } = this.state;
         if (productDetail === undefined) return null;
         return (
+            // <ScopedStyle style={[ProductListCss]}>
             <Layout className="mainLeaf">
                 <NavHeader />
                 <Content className="content">
@@ -160,6 +161,7 @@ export default class ProductList extends Component {
                     button.
                 </div>
             </Layout>
+            // </ScopedStyle>
         )
     }
 }

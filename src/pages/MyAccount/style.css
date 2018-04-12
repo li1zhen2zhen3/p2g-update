@@ -16,7 +16,8 @@
 .layout .myinvestment{
   height:200px;
   width:100%;
-  background: blue; 
+  /* background: blue;  */
+  border: 1px solid #333333;
   margin: 10px;
   padding: 10px;
 }
@@ -58,7 +59,8 @@
   height: 50px;
   line-height: 50px;
   font-size: 20px;
-  background: blue;
+  /* backgroundbackground: blue; */
+  border: 1px solid #333333;
   padding-left: 30px;
 }
 .settingContent{

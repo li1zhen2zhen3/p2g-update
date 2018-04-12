@@ -28,13 +28,14 @@ class Register extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 this.handleClick(values);
-                this.setState({
-                    mobile: values.phone
-                });
             }
         });
+    }
+    handlePhoneChange = (e) => {
+        this.setState({
+            mobile: e.target.value
+        })
     }
     handleConfirmBlur = (e) => {
         const value = e.target.value;
@@ -56,24 +57,33 @@ class Register extends React.Component {
         callback();
     }
     getVerifyCode = () => {
+        var that=this;
         const { mobile } = this.state;
-        const data = {
-            mobile: mobile
-        };
-        fetch('/v1/account/sendMessage', {//注册功能的url地址
+        const formData = new FormData();
+        formData.append('mobile', mobile);
+        fetch('/v1/account/fakesendMessage', {//注册功能的url地址
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)//传入参数
+            body: formData//传入参数
         })
-            .then(function (data) {
-                console.log('验证码获取成功', data)
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (data) {
+                        console.log(data.data);
+                        if (data.code == 0) {
+                            that.setState({
+                                validatationCodeToken: data.data
+                            })
+                        }
+                        else {
+                            message.error(data.message);
+                        }
+                    });
+                }
             })
             .catch(function (error) {
-                message.error('获取验证码失败');
-                console.log('request failed', error)
+                message.error('未知异常');
             })
     }
 
@@ -81,34 +91,23 @@ class Register extends React.Component {
         let that = this;
         const { roleCode, validatationCodeToken } = this.state;
         const formData = new FormData();
-        formData.append('accountName', values.accountName);
+        formData.append('accountName', values.nickname);
         formData.append('password', values.password);
-        formData.append('mobile', values.mobile);
-        formData.append('roleCode', 0);
+        formData.append('mobile', values.phone);
+        formData.append('roleCode', roleCode);
         formData.append('varifyCode', values.captcha);
         formData.append('validatationCodeToken', validatationCodeToken);
-        // let data = {
-        //     "accountName":values.nickname,
-        //     "password":values.password,
-        //     "mobile":values.phone,//注册时传入的参数
-        //     "roleCode": roleCode,
-        //     "varifyCode": values.captcha,
-        //     "validatationCodeToken":validatationCodeToken 
-        // }
-
         fetch('/v1/account/inv/register', {//注册功能的url地址
             method: 'POST',
             headers: {
-                // 'Accept ':'application/json',
-                // 'Content-Type':'application/json'
             },
-            // body:JSON.stringify(data)//传入参数
             body: formData
         })
             .then(function (response) {
                 response.json().then(function (data) {
                     console.log(data);
                     if (data.code == 0) {
+                        message.success("注册成功");
                         history.push('/login');
                     }
                     else {
@@ -193,7 +192,7 @@ class Register extends React.Component {
                                     {getFieldDecorator('phone', {
                                         rules: [{ required: true, message: '请输入您的手机号码!' }],
                                     })(
-                                        <Input name="phone" placeholder="请输入11位手机号码" />
+                                        <Input name="phone" value={this.state.mobile} onChange={this.handlePhoneChange} placeholder="请输入11位手机号码" />
                                     )}
                                 </FormItem>
 
@@ -201,7 +200,7 @@ class Register extends React.Component {
                                     {...formItemLayout}
                                     label="验证码"
                                 >
-                                    <Row gutter={8}>       
+                                    <Row gutter={8}>
                                         <Col span={12}>
                                             {getFieldDecorator('captcha', {
                                                 rules: [{ required: true, message: '请输入您收到的验证码!' }],
@@ -247,19 +246,19 @@ class Register extends React.Component {
                                         valuePropName: 'checked',
                                     })(
                                         <Row gutter={8}>
-                                <Col span={2}/>
-                                <Col span={6}>
-                                        <Checkbox>我已阅读并同意 <a href="">《用户协议》</a></Checkbox>
-                                        </Col>
-                                </Row>
+                                            <Col span={2} />
+                                            <Col span={6}>
+                                                <Checkbox>我已阅读并同意 <a href="">《用户协议》</a></Checkbox>
+                                            </Col>
+                                        </Row>
                                     )}
                                 </FormItem>
-                                <FormItem {...tailFormItemLayout} style={{textAlign:'center'}}>
-                                <Row gutter={8}>
-                                <Col span={5} offset={2}>
-                                    <Button type="primary" htmlType="submit" style={{background:'red', textAlign:'center',width:'200px'}}>立即注册</Button>
-                                </Col>
-                                </Row>
+                                <FormItem {...tailFormItemLayout} style={{ textAlign: 'center' }}>
+                                    <Row gutter={8}>
+                                        <Col span={5} offset={2}>
+                                            <Button type="primary" htmlType="submit" style={{ background: 'red', textAlign: 'center', width: '200px' }}>立即注册</Button>
+                                        </Col>
+                                    </Row>
                                 </FormItem>
                             </Form>
                         </section>
