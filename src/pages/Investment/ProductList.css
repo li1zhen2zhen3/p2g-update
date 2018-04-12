@@ -107,8 +107,9 @@ line-height: 120px;
   height:46px;
   line-height: 52px;
   font-size: 18px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;  
 }
+
 .contentBox{
   height:86px;
   width:70%;

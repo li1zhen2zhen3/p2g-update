@@ -195,8 +195,9 @@ border-bottom: 1px solid rgb(221; 221; 221);
 }
 
 .products-box .product-box .info-box .info .upInfo Button{
-  width:240px;
-  height:55px;
+  width:200px;
+  height:50px;
+  line-height: 50px;
   background: red;
   padding-bottom: 10px;
 }

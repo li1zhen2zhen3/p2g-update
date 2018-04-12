@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Layout, Menu, Breadcrumb, message } from 'antd';
+import { Layout, Menu, Breadcrumb, message, Pagination } from 'antd';
 import { Carousel, Icon } from 'antd';
 import { Link } from 'react-router';
 import { Button } from 'antd';
@@ -18,33 +18,45 @@ const { Header, Content, Footer } = Layout;
 
 class Transfer extends Component {
   state = {
-    current: 'mail',
-    accountId:null
+    current: 0,
+    productType: 0,
+    accountId: null,
+    loadding:false
   }
   componentDidMount() {
     var that = this;
-    const accountId=sessionStorage.getItem("accountId");
-    if(accountId!=null){
-        that.setState({
-          accountId:accountId
-        })
+    const accountId = sessionStorage.getItem("accountId");
+    if (accountId != null) {
+      that.setState({
+        accountId: accountId
+      })
     }
-    fetch('/v1/product/getRecommendProductList', {//获取首页展示产品列表
+    this.getProductListByType();
+  }
+  getProductListByType = () => {
+    var that = this;
+    that.setState({
+      loadding:true
+    })
+    const formData = new FormData();
+    console.log(that.state.productType);
+    console.log( that.state.current);    
+    formData.append('productType', that.state.productType);
+    formData.append('current', that.state.current);
+    fetch('/v1/product/getProductListByType', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
       },
-      body: {
-        current: 0
-      }      
+      body: formData
     })
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+            console.log(data);
             if (data.code == 0) {
               that.setState({
                 RecommendProductList: data.data,
+                loadding:false
               });
             }
             else {
@@ -57,32 +69,43 @@ class Transfer extends Component {
         message.error(res.status);
       })
   }
-  handleClick = (e) => {
-    console.log('click ', e);
+  handleTypeClick = (productType) => {
     this.setState({
-      current: e.key,
+      productType: productType,
+      current: 0
     });
+    this.getProductListByType();
   }
   clickFunction(pid, event) {
-    sessionStorage.setItem("pid",pid);
+    sessionStorage.setItem("pid", pid);
     var path = {
-      pathname: '/productlist',      
+      pathname: '/productlist',
     }
     history.push(path);
   }
+  handlePageCurrent = (page) => {
+    this.setState({
+      current: page-1,
+    });
+    this.getProductListByType();
+  }
   render() {
-    const { RecommendProductList } = this.state;
+    const { RecommendProductList,loadding } = this.state;
     if (RecommendProductList === undefined) return null;
+    if (loadding) return message.loading("正在加载中",0.5);
     return (
       <Layout className="mainLeaf">
-        <Nav/>
+        <Nav />
         <Content style={{ padding: '10 50px' }}>
-        <Carousel autoplay>
+          <Carousel autoplay>
             <div><img src={image1} /></div>
           </Carousel>
           <div className="transferContentBox">
             <div className="testHead">
-              <Button></Button>
+              <Button className="buttonNavBox" onClick={this.handleTypeClick.bind(this, 0)}>全部</Button>
+              <Button className="buttonNavBox" onClick={this.handleTypeClick.bind(this, 1)}>类型1</Button>
+              <Button className="buttonNavBox" onClick={this.handleTypeClick.bind(this, 2)}>类型2</Button>
+              <Button className="buttonNavBox" onClick={this.handleTypeClick.bind(this, 3)}>类型3</Button>
             </div>
             {
               RecommendProductList.map(item => (
@@ -114,7 +137,11 @@ class Transfer extends Component {
                 </div>
               ))
             }
-
+          </div>
+          <div style={{ width: "72%", margin: "auto" }}>
+            <div style={{ float: "right", margin: "20px 0px" }}>
+              <Pagination defaultCurrent={this.state.current+1} onChange={this.handlePageCurrent} total={50} />
+            </div>
           </div>
         </Content>
 

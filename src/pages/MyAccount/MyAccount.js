@@ -50,12 +50,13 @@ const data = [{
 
 export default class MyAccount extends Component {
   state = {
-    bindStatus:false
+    bindStatus:true
   }
   componentDidMount() {
     var that = this;
     const accountId = sessionStorage.getItem("accountId");
     const token = sessionStorage.getItem("token");
+    console.log(token);
     if (accountId == null || token == null) {
       confirm({
         title: '未登录',
@@ -66,27 +67,38 @@ export default class MyAccount extends Component {
       });
     }
     else {
-      const formData = new FormData();
-      formData.append('accountId', accountId);
-      formData.append('token', token);
-      fetch('/v1/inv_basic?accountId=' + accountId + '&token=' + token, {//注册功能的url地址
+      // const formData = new FormData();
+      // formData.append('accountId', accountId);
+      // formData.append('token', token);      
+      fetch(`/v1/inv_basic?token=${token}&accountId=${accountId}`, {//注册功能的url地址
         method: 'GET',
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
         },
       })
         .then(function (response) {
+          console.log(response);
           if (response.ok) {
-            response.json().then(function (data) {
-              console.log(data);
-              if (data.code == 0) {
-                console.log(data.data);
-              }
-              else {
-                message.error(data.message);
-              }
-            });
+            // response.json().then(function (data) {
+            //   console.log(data);
+            //   if (data.code == 0) {
+            //     that.setState({
+            //       AccountBasicInfo:data.data
+            //     })                
+            //     console.log(data.data);
+            //   }
+            //   else {
+            //     that.setState({
+            //       AccountBasicInfo:{}
+            //     }) 
+            //   }
+            // })
+            // .catch(function (error) {
+            //   message.error('未知异常');
+            // })
+
+            that.setState({
+                    AccountBasicInfo:{}
+                  })
           }
         })
         .catch(function (error) {
@@ -175,7 +187,8 @@ export default class MyAccount extends Component {
     });
   }
   render() {
-    const {bindStatus, fundRecordList } = this.state;
+    const {bindStatus, fundRecordList,AccountBasicInfo } = this.state;
+    if (AccountBasicInfo === undefined) return null;
     return (
       <div>
         <Nav />
@@ -196,24 +209,12 @@ export default class MyAccount extends Component {
                     <span>代收收益(元)</span>
                   </div>
                   <div className="content" style={{ fontSize: '25px' }}>
-                    <span>2.00</span>
-                    <span>0.00</span>
-                    <span>0.00</span>
-                    <span>0.00</span>
+                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
+                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
+                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
+                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
                   </div>
-                </div>
-                <div className="content">
-                  <span>总资产(元)</span>
-                  <span>在投资金(元)</span>
-                  <span>已收收益(元)</span>
-                  <span>代收收益(元)</span>
-                </div>
-                <div className="content" style={{ fontSize: '25px' }}>
-                  <span>2.00</span>
-                  <span>0.00</span>
-                  <span>0.00</span>
-                  <span>0.00</span>
-                </div>
+                </div>               
               </div>
               <div className="myinvestment">
                 <div className="myinvesttop">
@@ -223,7 +224,7 @@ export default class MyAccount extends Component {
                 <div className="contentTwo">
                   <div>
                     <div>可用余额(元)</div>
-                    <div style={{ fontSize: '25px' }}>2.00</div>
+                    <div style={{ fontSize: '25px' }}>{AccountBasicInfo.asset-AccountBasicInfo.totalInvestment}</div>
                   </div>
                   <div>
                     <Button type="primary" size="large" style={{ width: '100px' }}>充值</Button>
@@ -272,15 +273,11 @@ export default class MyAccount extends Component {
                   </div>
                   <div className="content">
                     <span>投资金额(元)</span>
-                    <span>已收收益(元)</span>
-                    <span>待收收益(元)</span>
-                    <span>当期持有收益(元)</span>
+                    <span>已收收益(元)</span>                    
                   </div>
                   <div className="content" style={{ fontSize: '25px' }}>
-                    <span>0.00</span>
-                    <span>0.00</span>
-                    <span>0.00</span>
-                    <span>0.00</span>
+                    <span>{AccountBasicInfo.totalInvestment}</span>
+                    <span>{AccountBasicInfo.totalProfit}</span>                   
                   </div>
                 </div>
                 <div className="myinvestment" style={{ height: '500px' }}>

@@ -75,7 +75,7 @@ class Nav extends Component {
             style={{ lineHeight: '40px', float: "right", width: '100%', fontSize: '14px' }}
           >
             <Menu.Item key="1"><Link to="/">首页</Link></Menu.Item>
-            <Menu.Item key="2"><Link to="/productlist">理财频道</Link></Menu.Item>
+            <Menu.Item key="2"><Link to="/product">理财频道</Link></Menu.Item>
             <Menu.Item key="3"><Link to="/transfer">转让专区</Link></Menu.Item>
             <Menu.Item key="4"><Link to="myaccount">我的账户</Link></Menu.Item>
             <Menu.Item key="5">

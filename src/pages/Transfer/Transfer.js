@@ -19,15 +19,15 @@ const { Header, Content, Footer } = Layout;
 class Transfer extends Component {
   state = {
     current: 'mail',
-    accountId:null
+    accountId: null
   }
   componentDidMount() {
     var that = this;
-    const accountId=sessionStorage.getItem("accountId");
-    if(accountId!=null){
-        that.setState({
-          accountId:accountId
-        })
+    const accountId = sessionStorage.getItem("accountId");
+    if (accountId != null) {
+      that.setState({
+        accountId: accountId
+      })
     }
     fetch('/v1/product/getRecommendProductList', {//获取首页展示产品列表
       method: 'POST',
@@ -37,7 +37,7 @@ class Transfer extends Component {
       },
       body: {
         current: 0
-      }      
+      }
     })
       .then((response) => {
         if (response.ok) {
@@ -64,9 +64,9 @@ class Transfer extends Component {
     });
   }
   clickFunction(pid, event) {
-    sessionStorage.setItem("pid",pid);
+    sessionStorage.setItem("pid", pid);
     var path = {
-      pathname: '/productlist',      
+      pathname: '/productlist',
     }
     history.push(path);
   }
@@ -75,9 +75,9 @@ class Transfer extends Component {
     if (RecommendProductList === undefined) return null;
     return (
       <Layout className="mainLeaf">
-        <Nav/>
+        <Nav />
         <Content style={{ padding: '10 50px' }}>
-        <Carousel autoplay>
+          <Carousel autoplay>
             <div><img src={image1} /></div>
           </Carousel>
           <div className="transferContentBox">
@@ -104,15 +104,15 @@ class Transfer extends Component {
                         <div className="downInfo">预计下一收款日</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">{item.miniInvestment}</div>
+                        <div className="upInfo" style={{fontSize:"13px"}}>{item.miniInvestment}元</div>
                         <div className="downInfo">项目价值</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">{item.miniInvestment}</div>
+                        <div className="upInfo" style={{fontSize:"13px"}}>{item.miniInvestment}元</div>
                         <div className="downInfo">转让价格</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo"><Button type="primary" onClick={this.clickFunction.bind(this, item.id)}>转让</Button></div>
+                        <Button type="primary" onClick={this.clickFunction.bind(this, item.id)}>转让</Button>
                       </div>
                     </div>
                   </div>
