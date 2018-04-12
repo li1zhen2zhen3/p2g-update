@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import history from '../../history';
 import { saveState, fetchState } from '../../store';
-import './Login.css';
+import './SetTransPwd.css';
 import Nav from 'components/Nav/Nav';
 
 
@@ -29,9 +29,10 @@ class SetTransPwd extends Component {
     handleClick(values) {
         const remember=values.remember;
         const formData = new FormData();
-        formData.append('account', values.userName);
-        formData.append('password', values.password);
-        fetch('/v1/account/inv/login', {//注册功能的url地址
+        formData.append('uid',sessionStorage.getItem('accountId'));
+        formData.append('transactionPassword', values.transPwd);
+        formData.append('token', sessionStorage.getItem('token'));
+        fetch('/v1/account/setTransPWD', {//注册功能的url地址
             method: 'POST',
             headers: {
             },
@@ -40,8 +41,7 @@ class SetTransPwd extends Component {
             .then(function (response) {
                 response.json().then(function (data) {
                     if (data.code == 0) {
-                        sessionStorage.setItem("accountId",data.data.accountId);
-                        sessionStorage.setItem("token",data.data.token);
+                        message.success('交易密码设置成功');
                         history.push('/');
                     }
                     else {
@@ -68,11 +68,11 @@ class SetTransPwd extends Component {
         return (
             <div>
                 <Nav />
-                <div className="loginClass">
-                    <div className="wrapper">
-                        <div className="body">
-                            <header className="headerOne">设置交易密码界面</header>
-                            <section className="form">
+                <div className="loginClass4">
+                    <div className="wrapper4">
+                        <div className="body4">
+                            <header className="headerOne4">设置交易密码界面</header>
+                            <section className="form4">
                             <Form onSubmit={this.handleSubmit} >
                             <FormItem
                             {...formItemLayout}
@@ -91,7 +91,7 @@ class SetTransPwd extends Component {
                             {getFieldDecorator('transPwd', {
                                 rules: [{ required: true, message: '请输入交易密码!' }]
                             })(
-                                <Input placeholder="请填写交易密码" />
+                                <Input type="password" placeholder="请填写交易密码" />
                             )}
                             </FormItem>
                             <FormItem
@@ -101,7 +101,7 @@ class SetTransPwd extends Component {
                             {getFieldDecorator('transConfirmPwd', {
                                 rules: [{ required: true, message: '请输入确认密码!' }]
                             })(
-                                <Input placeholder="请再次填写密码" />
+                                <Input type="password" placeholder="请再次填写密码" />
                             )}
                             </FormItem>
                             <FormItem style={{ textAlign: 'center' }}>

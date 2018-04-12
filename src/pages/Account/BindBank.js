@@ -1,5 +1,6 @@
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,message} from 'antd';
 import React, {Component} from 'react';
+import history from '../../history';
 import style from './BindBank.css';
 import Nav from 'components/Nav/Nav';
 
@@ -41,7 +42,34 @@ class ForgetPassword extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                const formData = new FormData();
+                formData.append('uid', sessionStorage.getItem('accountId'));
+                formData.append('bankAccount', values.bankCard);
+                formData.append('bankDeposit', values.openBank);
+                formData.append('reservedTelephone', values.phone);
+                formData.append('realName', values.realName);
+                formData.append('idCard', values.idCard);
+                formData.append('token', sessionStorage.getItem('token'));
+                fetch('/v1/account/cardBinding', {
+                    method: 'POST',
+                    headers: {
+                    },
+                    body: formData//传入参数
+                })
+                    .then(function (response) {
+                        response.json().then(function (data) {
+                            if (data.code == 0) {
+                               message.success("绑定银行卡成功");
+                                history.push('/setPwd'); 
+                            }
+                            else {
+                                message.error(data.message);
+                            }
+                        });
+                    })
+                    .catch(function (error) {
+                        message.error('绑定银行卡失败');
+                    })
             }
         });
     }
@@ -119,20 +147,17 @@ class ForgetPassword extends React.Component {
             <div>
                 <Nav/>
             <div>
-                <div className="subnav">
-                    绑定银行卡
-                </div>
-                <div className="big">
-                    <div className="wrapper">
-                        <div className="body">
-                            <header className="header">绑定银行卡</header>
-                            <section className="form">
+                <div className="big1">
+                    <div className="wrapper1">
+                        <div className="body1">
+                            <header className="header1">绑定银行卡</header>
+                            <section className="form1">
                                 <Form onSubmit={this.handleSubmit}>
                                     <FormItem
                                         {...formItemLayout}
                                         label="真实姓名"
                                     >
-                                        {getFieldDecorator('phone', {
+                                        {getFieldDecorator('realName', {
                                             rules: [{required: true, message: '请输入您的真实姓名!'}],
                                         })(
                                             <Input  placeholder="请输入您的真实姓名"/>
@@ -142,19 +167,17 @@ class ForgetPassword extends React.Component {
                                         {...formItemLayout}
                                         label="身份证号"
                                     >
-                                        {getFieldDecorator('confirm', {
+                                        {getFieldDecorator('idCard', {
                                             rules: [{
                                                 required: true, message: '请输入您的身份证号码!',
-                                            }, {
-                                                validator: this.checkPassword,
                                             }],
                                         })(
-                                            <Input type="password" onBlur={this.handleConfirmBlur} placeholder="请输入您的身份证号码"/>
+                                            <Input  onBlur={this.handleConfirmBlur} placeholder="请输入您的身份证号码"/>
                                         )}
                                     </FormItem>
                                     <FormItem
                                         {...formItemLayout}
-                                        label="银行预留手机号码"
+                                        label="预留手机号码"
                                     >
                                         {getFieldDecorator('phone', {
                                             rules: [{required: true, message: '请输入您的手机号码!'}],
@@ -164,33 +187,26 @@ class ForgetPassword extends React.Component {
                                     </FormItem>
                                     <FormItem
                                         {...formItemLayout}
-                                        label="验证码"
+                                        label="银行卡号"
                                     >
-                                        <Row gutter={8}>
-                                            <Col span={12}>
-                                                {getFieldDecorator('captcha', {
-                                                    rules: [{required: true, message: '请输入您收到的验证码!'}],
-                                                })(
-                                                    <Input placeholder="请输入验证码"/>
-                                                )}
-                                            </Col>
-                                            <Col span={12}>
-                                                <Button>发送验证码</Button>
-                                            </Col>
-                                        </Row>
+                                        {getFieldDecorator('bankCard', {
+                                            rules: [{
+                                                required: true, message: '请输入您的银行卡号!',
+                                            }],
+                                        })(
+                                            <Input placeholder="请输入储蓄卡卡号"/>
+                                        )}
                                     </FormItem>
                                     <FormItem
                                         {...formItemLayout}
-                                        label="银行卡号"
+                                        label="开户行"
                                     >
-                                        {getFieldDecorator('password', {
+                                        {getFieldDecorator('openBank', {
                                             rules: [{
-                                                required: true, message: '请输入您的银行卡号!',
-                                            }, {
-                                                validator: this.checkConfirm,
+                                                required: true, message: '请输入开户行!',
                                             }],
                                         })(
-                                            <Input type="password" placeholder="请输入储蓄卡卡号"/>
+                                            <Input  placeholder="请输入开户行"/>
                                         )}
                                     </FormItem>
 

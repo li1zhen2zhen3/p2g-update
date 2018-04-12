@@ -282,11 +282,9 @@ export default class MyAccount extends Component {
                 </div>
                 <div className="myinvestment" style={{ height: '500px' }}>
                   <Tabs defaultActiveKey="1" onChange={this.callback}>
-                    <TabPane tab="持有中" key="1">选项卡一内容</TabPane>
-                    <TabPane tab="募集中" key="2">选项卡二内容</TabPane>
-                    <TabPane tab="已结清" key="3">选项卡三内容</TabPane>
-                    <TabPane tab="已转让" key="4">选项卡三内容</TabPane>
-                    <TabPane tab="未完成" key="5">选项卡三内容</TabPane>
+                    <TabPane tab="投资记录" key="1">
+                    <Table columns={columns} dataSource={data} style={{ marginTop: '30px' }} />
+                    </TabPane>
                   </Tabs>
                 </div>
               </div>

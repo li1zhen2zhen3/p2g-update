@@ -1,10 +1,10 @@
-.subnav{
+.subnav1{
     height:50px;
     width:100%;
     padding:10px 0 10px 20%;
     font-size:24px;
 }
-.big{
+.big1{
     width:100%;
     background-color:#EEEEEE;
     display:flex;
@@ -12,12 +12,12 @@
     padding:50px 0;
 }
 
-.wrapper {
+.wrapper1 {
     width:60%;
     background-color: white;
 }
 
-.body {
+.body1 {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -25,7 +25,7 @@
     justify-content: center;
 }
 
-.header {
+.header1 {
     width: 20%;
     font-size: 20px;
     padding: 30px 20px;
@@ -33,7 +33,7 @@
     text-align:center;
 }
 
-.form {
+.form1 {
     margin-top: 12px;
     padding: 24px;
 }

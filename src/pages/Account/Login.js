@@ -44,7 +44,7 @@ class Login extends Component {
                         sessionStorage.setItem("accountMobile",accountMobile);
                         sessionStorage.setItem("accountId",data.data.accountId);
                         sessionStorage.setItem("token",data.data.token);
-                        history.push('/');
+                        history.push('/bindbank');
                     }
                     else {
                         message.error(data.message);
@@ -60,12 +60,12 @@ class Login extends Component {
         return (
             <div>
                 <Nav />
-                <div className="loginClass">
-                    <div className="wrapper">
-                        <div className="body">
-                            <header className="headerOne">用户登录界面</header>
-                            <section className="form">
-                                <Form onSubmit={this.handleSubmit} className="login-form">
+                <div className="loginClass3">
+                    <div className="wrapper3">
+                        <div className="body3">
+                            <header className="headerOne3">用户登录界面</header>
+                            <section className="form3">
+                                <Form onSubmit={this.handleSubmit} className="login-form3">
                                     <FormItem>
                                         {getFieldDecorator('userName', {
                                             rules: [{ required: true, message: 'Please input your username!' }],
@@ -89,8 +89,8 @@ class Login extends Component {
                                         })(
                                             <Checkbox>记住密码</Checkbox>
                                         )}
-                                        <a className="login-form-forgot" href="/forgetpassword">忘记密码</a>
-                                        <Button type="primary" htmlType="submit" className="login-form-button" >
+                                        <a className="login-form-forgot3" href="/forgetpassword">忘记密码</a>
+                                        <Button type="primary" htmlType="submit" className="login-form-button3" >
                                             登录
                                     </Button>
                                         Or <a href="/register">立即注册!</a>

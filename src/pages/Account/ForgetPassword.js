@@ -143,14 +143,14 @@ class ForgetPassword extends React.Component {
 
         return (
             <div>
-            <div className="subnav">
+            <div className="subnav2">
                 忘记密码
             </div>
-            <div className="big">
-            <div className="wrapper">
-                <div className="body">
-                    <header className="header">修改密码</header>
-                    <section className="form">
+            <div className="big2">
+            <div className="wrapper2">
+                <div className="body2">
+                    <header className="header2">修改密码</header>
+                    <section className="form2">
                         <Form onSubmit={this.handleSubmit}>
                             <FormItem
                                 {...formItemLayout}
