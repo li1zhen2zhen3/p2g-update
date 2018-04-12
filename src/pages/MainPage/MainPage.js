@@ -153,7 +153,7 @@ class MainPage extends Component {
           <div className="test">
             <div className="testHead">
               理财产品
-      <a href="/productlist" className="moreProduct">更多理财产品>></a>
+      <a href="/product" className="moreProduct">更多理财产品>></a>
             </div>
             {
               RecommendProductList.map(item => (

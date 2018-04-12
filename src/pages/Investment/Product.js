@@ -9,7 +9,7 @@ import Nav from 'components/Nav/Nav';
 // import image1 from './images/1.jpg';
 import image1 from './image/timg.jpg';
 import { Table } from 'antd';
-import './style.css';
+import '../Transfer/style.css';
 import history from '../../history';
 
 const SubMenu = Menu.SubMenu;
@@ -82,8 +82,7 @@ class Transfer extends Component {
           </Carousel>
           <div className="transferContentBox">
             <div className="testHead">
-              理财产品
-      <a href="/productlist" className="moreProduct">更多理财产品>></a>
+              <Button></Button>
             </div>
             {
               RecommendProductList.map(item => (
@@ -97,22 +96,18 @@ class Transfer extends Component {
                       </div>
                       <div className="info">
                         <div className="upInfo">>{item.duration} <span className="up-percent">个月</span></div>
-                        <div className="downInfo">剩余投资期限</div>
+                        <div className="downInfo">投资期限</div>
                       </div>
                       <div className="info">
                         <div className="upInfo">2019-08-06</div>
-                        <div className="downInfo">预计下一收款日</div>
+                        <div className="downInfo">最低投资金额</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">{item.miniInvestment}</div>
-                        <div className="downInfo">项目价值</div>
+                        <div className="upInfo">按季收益，到期回本</div>
+                        <div className="downInfo">收益方式</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">{item.miniInvestment}</div>
-                        <div className="downInfo">转让价格</div>
-                      </div>
-                      <div className="info">
-                        <div className="upInfo"><Button type="primary" onClick={this.clickFunction.bind(this, item.id)}>转让</Button></div>
+                        <div className="upInfo"><Button type="primary" onClick={this.clickFunction.bind(this, item.id)}>立即投资</Button></div>
                       </div>
                     </div>
                   </div>

@@ -11,7 +11,8 @@ import TableGet from 'components/Tablea/TableGet';
 import './ProductList.css';
 import image9 from '../MainPage/images/logoPic.png';
 import { Tabs, InputNumber } from 'antd';
-import { Loading } from '../../components/Loading/Loading'
+import { Loading } from '../../components/Loading/Loading';
+import history from '../../history';
 
 
 const TabPane = Tabs.TabPane;
@@ -19,11 +20,11 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const { Header, Content, Footer } = Layout;
 
-
 export default class ProductList extends Component {
     state = {
         current: 'mail',
-        pid: sessionStorage.getItem('pid')
+        pid: sessionStorage.getItem('pid'),
+        investValue: 10000
     }
     componentDidMount() {
         const { pid } = this.state;
@@ -54,6 +55,19 @@ export default class ProductList extends Component {
                 message.error(res.status);
             })
     }
+    handleValueChange = (e) => {
+        this.setState({
+            investValue: e
+        });
+    }
+    immediateInvest = () => {
+        const {investValue} = this.state;
+        sessionStorage.setItem("investValue",investValue);
+        console.log(investValue)
+        sessionStorage.setItem("pid",this.state.pid);
+        history.push('/invest');
+    }
+        
     handleClick = (e) => {
         console.log('click ', e);
         this.setState({
@@ -69,14 +83,7 @@ export default class ProductList extends Component {
     
         }
     }
-    onChange = (value) => {
-        sessionStorage.setItem("investValue",value);
-        sessionStorage.setItem("pid",this.state.pid);
-        var path = {
-            pathname: '/invest',
-        };
-        history.push(path);
-    }
+   
 
     render() {
         const { productDetail, loading } = this.state;
@@ -88,7 +95,7 @@ export default class ProductList extends Component {
                     <div className="product">
                         <div className="testHead">
                             理财产品
-                    <a href="#" className="moreProduct">更多理财产品>></a>
+                    <a href="product" className="moreProduct">更多理财产品>></a>
                         </div>
                         <div className="products-box">
                             <div className="product-box">
@@ -107,11 +114,11 @@ export default class ProductList extends Component {
                                         <div className="downInfo">起投金额</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo"><InputNumber min={10000} max={20000} defaultValue={10000} onChange={this.onChange} /></div>
+                                        <div className="upInfo" style={{fontSize:'15px'}}>实付金额：<InputNumber min={10000} max={20000} value={this.state.investValue} onChange={this.handleValueChange} /></div>
                                         <div className="lastInfo">即时计息，每半年收益，到期回本</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo"><Button type="primary"><Link to="/invest">立即投资</Link></Button></div>
+                                        <div className="upInfo"><Button type="primary" onClick={this.immediateInvest}>立即投资</Button></div>
                                     </div>
                                 </div>
                             </div>
