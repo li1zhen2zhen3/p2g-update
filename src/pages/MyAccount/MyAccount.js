@@ -474,17 +474,11 @@ this.getTransferList();
                   <div className="myinvesttop">
                     <span style={{ fontSize: '20px' }}>投资概况</span>
                   </div>
-                  <div className="content">
-                    <span>总资产(元)</span>
-                    <span>在投资金(元)</span>
-                    <span>投资金额(元)</span>
-                    <span>已收收益(元)</span>
-                  </div>
-                  <div className="content" style={{ fontSize: '25px' }}>
-                    <span>{AccountBasicInfo.asset/100}</span>
-                    <span>{AccountBasicInfo.investAmount/100}</span>
-                    <span>{AccountBasicInfo.totalInvestment/100}</span>
-                    <span>{AccountBasicInfo.totalProfit/100}</span>
+                  <div className="surveyAccountBox"> 
+                  <div className="contentBoxxx"> <span>总资产(元)</span><span>{AccountBasicInfo.asset}</span></div>  
+                  <div className="contentBoxxx"><span>在投资金(元)</span> <span>{AccountBasicInfo.investAmount}</span></div>                
+                  <div className="contentBoxxx"><span>投资金额(元)</span><span>{AccountBasicInfo.totalInvestment}</span></div> 
+                  <div className="contentBoxxx"><span>已收收益(元)</span><span>{AccountBasicInfo.totalProfit}</span></div> 
                   </div>
                 </div>
                 <div className="myinvestment" style={{ height: 'auto' }}>

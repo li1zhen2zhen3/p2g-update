@@ -69,3 +69,15 @@
 .settingContent label {
   margin-left: 10px;
 }
+.surveyAccountBox{
+  display: flex;
+  justify-content: space-between;  
+}
+.surveyAccountBox .contentBoxxx{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.surveyAccountBox .contentBoxxx span{
+  display: block;
+}
