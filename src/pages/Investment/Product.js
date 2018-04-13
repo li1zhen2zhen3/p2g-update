@@ -122,7 +122,7 @@ class Transfer extends Component {
                         <div className="downInfo">投资期限</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">2019-08-06</div>
+                        <div className="upInfo">{item.miniInvestment/100}</div>
                         <div className="downInfo">最低投资金额</div>
                       </div>
                       <div className="info">

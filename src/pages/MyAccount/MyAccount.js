@@ -390,9 +390,6 @@ this.getTransferList();
     }, {
       title: '金额',
       dataIndex: 'price',
-    }, {
-      title: '预期收益',
-      dataIndex: 'yield',
     },{
       title: '转让状态',
       dataIndex: 'status',
@@ -458,16 +455,6 @@ this.getTransferList();
                 cancelText="取消"
               >
                 <Input value={this.state.price} onChange={this.changePrice} />
-                {/* <FormItem
-                  {...formItemLayout}
-                  label="转让金额"
-                  colon={false}
-                >
-                  {getFieldDecorator('transPwd', {
-                  })(
-                    <Input />
-                  )} */}
-                {/* </FormItem> */}
               </Modal>
             </FormItem>
           </Form>
@@ -494,10 +481,10 @@ this.getTransferList();
                     <span>已收收益(元)</span>
                   </div>
                   <div className="content" style={{ fontSize: '25px' }}>
-                    <span>{AccountBasicInfo.asset}</span>
-                    <span>{AccountBasicInfo.investAmount}</span>
-                    <span>{AccountBasicInfo.totalInvestment}</span>
-                    <span>{AccountBasicInfo.totalProfit}</span>
+                    <span>{AccountBasicInfo.asset/100}</span>
+                    <span>{AccountBasicInfo.investAmount/100}</span>
+                    <span>{AccountBasicInfo.totalInvestment/100}</span>
+                    <span>{AccountBasicInfo.totalProfit/100}</span>
                   </div>
                 </div>
                 <div className="myinvestment" style={{ height: 'auto' }}>
@@ -519,11 +506,11 @@ this.getTransferList();
                   <div className="contentTwo">
                     <div>
                       <div>总资产(元)</div>
-                      <div style={{ fontSize: '25px' }}>2.00</div>
+                      <div style={{ fontSize: '25px' }}>{AccountBasicInfo.asset/100}</div>
                     </div>
                     <div>
                       <div>可用余额(元)</div>
-                      <div style={{ fontSize: '25px' }}>2.00</div>
+                      <div style={{ fontSize: '25px' }}>{AccountBasicInfo.asset/100 - AccountBasicInfo.investAmount/100}</div>
                     </div>
                     <div>
                       <Button type="primary" size="large" style={{ width: '100px' }}><Link to="/pay">充值</Link></Button>

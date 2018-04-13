@@ -32,8 +32,8 @@ const devConfig = {
         proxy: {
             "/api/*": "http://localhost:8090/$1",
             "/v1":{
-                target: "http://120.79.33.178:8080/p2g",
-                // target: "http://192.168.0.120:8080/p2g",
+                // target: "http://120.79.33.178/p2g",
+                target: "http://192.168.0.120:8080/p2g",
                 secure:false,
                 changeOrigin: true,
                 pathRewrite: {

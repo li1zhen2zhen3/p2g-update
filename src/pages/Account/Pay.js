@@ -26,7 +26,7 @@ class Pay extends React.Component {
         const formData = new FormData();
         formData.append('uid',sessionStorage.getItem('accountId'));
         formData.append('transaction-password',values.transPwd);
-        formData.append('money', values.money);
+        formData.append('money', values.money*100);
         formData.append('token',sessionStorage.getItem('token'));
         fetch('/v1/account/recharge',{//注册功能的url地址
             method:'POST',
@@ -114,7 +114,7 @@ class Pay extends React.Component {
                                             {getFieldDecorator('money', {
                                                 rules: [{required: true, message: '请输入您需要充值的金额!'}],
                                             })(
-                                                <Input placeholder="请输入充值金额（精确到分"/>
+                                                <Input placeholder="请输入充值金额"/>
                                             )}
                                         </FormItem>
                                         <FormItem {...tailFormItemLayout}>

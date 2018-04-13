@@ -73,11 +73,10 @@ class Transfer extends Component {
       current: e.key,
     });
   }
-  clickFunction(pid, event) {
-    sessionStorage.setItem("pid", pid);
-    sessionStorage.setItem("transferBoolean", 1)
+  clickFunction(tid, event) {
+    sessionStorage.setItem("tid", tid);
     var path = {
-      pathname: '/productlist',
+      pathname: '/transferlist',
     }
     history.push(path);
   }

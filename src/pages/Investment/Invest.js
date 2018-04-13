@@ -90,7 +90,7 @@ class Invest extends React.Component {
         const formData = new FormData();
         formData.append('pid', pid);
         formData.append('accountId', accountId);
-        formData.append('money', investValue);
+        formData.append('money', investValue*100);
         formData.append('tpwd', tpwd);
         formData.append('token', token);
         var that = this;
@@ -106,7 +106,7 @@ class Invest extends React.Component {
                         if (data.code == 0) {                           
                             console.log(data.data);
                             message.success("投资成功");
-                            history.push('/product');
+                            history.push("myaccount")
                         }
                         else {
                             message.error(data.message);
@@ -156,7 +156,7 @@ class Invest extends React.Component {
                                     <div className="downInfo">产品期限</div>
                                 </div>
                                 <div className="info">
-                                    <div className="upInfo">{productDetails.miniInvestment} <span className="up-percent">万元</span></div>
+                                    <div className="upInfo">{(productDetails.miniInvestment)/100} <span className="up-percent">元</span></div>
                                     <div className="downInfo">起投金额</div>
                                 </div>
                                 <div className="info">
@@ -189,9 +189,9 @@ class Invest extends React.Component {
                   colon={false}
                 >
                   {getFieldDecorator('propal', {
-                      initialValue: investValue * productDetails.yield || '0',
+                      initialValue: ((investValue) * productDetails.yield)/100|| '0',
                   })(
-                    <Input />
+                    <Input disabled={true}/>
                 )}
                 </FormItem>
                 <FormItem

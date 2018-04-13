@@ -20,6 +20,7 @@ import SetTransPwd from 'bundle-loader?lazy&name=down!pages/Account/SetTransPwd'
 import Transfer from 'bundle-loader?lazy&name=down!pages/Transfer/Transfer';
 import Product from 'bundle-loader?lazy&name=down!pages/Investment/Product';
 import MessageList from 'bundle-loader?lazy&name=down!pages/Message/MessageList';
+import TransferList from 'bundle-loader?lazy&name=down!pages/Transfer/TransferList';
 
 
 const createComponent = (component) => () => (
@@ -47,6 +48,7 @@ export default () => (
             <Route path="/transfer" component={createComponent(Transfer)}/>
             <Route path="/product" component={createComponent(Product)}/>
             <Route path="/message" component={createComponent(MessageList)}/>
+            <Route path="/transferList" component={createComponent(TransferList)}/>
             <Route component={createComponent(NotFound)}/>
         </Switch>
     </div>

@@ -170,7 +170,7 @@ class MainPage extends Component {
                         <div className="downInfo">产品期限</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">{item.miniInvestment} <span className="up-percent">万元</span></div>
+                        <div className="upInfo">{item.miniInvestment/100} <span className="up-percent">元</span></div>
                         <div className="downInfo">起投金额</div>
                       </div>
                       <div className="info">
