@@ -29,19 +29,29 @@ class Transfer extends Component {
         accountId: accountId
       })
     }
-    fetch('/v1/product/getRecommendProductList', {//获取首页展示产品列表
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: {
-        current: 0
+    let url = "/v1/transfer/transferList";
+    let params = {
+    }
+    if (params) {
+      let paramsArray = [];
+      //拼接参数  
+      Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+      if (url.search(/\?/) === -1) {
+        url += '?' + paramsArray.join('&')
+      } else {
+        url += '&' + paramsArray.join('&')
       }
+    }
+    let myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    fetch(url, {//注册功能的url地址
+      method: 'GET',
+      headers: myHeaders,
     })
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+            console.log(data.data);
             if (data.code == 0) {
               that.setState({
                 RecommendProductList: data.data,
@@ -65,6 +75,7 @@ class Transfer extends Component {
   }
   clickFunction(pid, event) {
     sessionStorage.setItem("pid", pid);
+    sessionStorage.setItem("transferBoolean", 1)
     var path = {
       pathname: '/productlist',
     }
@@ -89,14 +100,14 @@ class Transfer extends Component {
               RecommendProductList.map(item => (
                 <div className="products-box">
                   <div className="product-box">
-                    <div className="name-box">{item.project.name}    {item.name}</div>
+                    <div className="name-box">{item.investmentRecordEntity.govProduct.project.name}    {item.investmentRecordEntity.govProduct.name}</div>
                     <div className="info-box">
                       <div className="info">
-                        <div className="upInfo">{item.yield}<span className="up-percent">%</span></div>
+                        <div className="upInfo">{item.investmentRecordEntity.govProduct.yield}<span className="up-percent">%</span></div>
                         <div className="downInfo">预期年化收益率</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo">>{item.duration} <span className="up-percent">个月</span></div>
+                        <div className="upInfo">>{item.investmentRecordEntity.govProduct.duration} <span className="up-percent">个月</span></div>
                         <div className="downInfo">剩余投资期限</div>
                       </div>
                       <div className="info">
@@ -104,11 +115,11 @@ class Transfer extends Component {
                         <div className="downInfo">预计下一收款日</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo" style={{fontSize:"13px"}}>{item.miniInvestment}元</div>
+                        <div className="upInfo" style={{ fontSize: "13px" }}>{item.investmentRecordEntity.govProduct.miniInvestment}元</div>
                         <div className="downInfo">项目价值</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo" style={{fontSize:"13px"}}>{item.miniInvestment}元</div>
+                        <div className="upInfo" style={{ fontSize: "13px" }}>{item.investmentRecordEntity.govProduct.miniInvestment}元</div>
                         <div className="downInfo">转让价格</div>
                       </div>
                       <div className="info">

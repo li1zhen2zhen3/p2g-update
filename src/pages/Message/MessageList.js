@@ -13,7 +13,39 @@ export default class List extends Component {
 
     };
   }
-
+  componentDidMount() {
+    var that = this;
+    const accountId = sessionStorage.getItem("accountId");
+    const token = sessionStorage.getItem("token");
+    // fetch(`/v1/message/messageList`, {//注册功能的url地址
+    //   method: 'GET',
+    //   headers: {
+    //   },
+    // })
+    //   .then(function (response) {
+    //     console.log(response);
+    //     if (response.ok) {
+    //       response.json().then(function (data) {
+    //         console.log(data);
+    //         if (data.code == 0) {
+    //           that.setState({
+    //             AccountBasicInfo:data.data
+    //           })                
+    //           console.log(data.data);
+    //         }
+    //         else {
+    //           that.setState({
+    //             AccountBasicInfo:{}
+    //           }) 
+    //         }
+    //       })
+    //       .catch(function (error) {
+    //         message.error('未知异常');
+    //       })
+    //     }
+    //   }
+    // }
+  }
   // 标记已读状态
   callback = (key) => {
     console.log(key);

@@ -25,7 +25,7 @@ const devConfig = {
         }]
     },
     devServer: {
-        port: 3002,
+        port: 3000,
         contentBase: path.join(__dirname, './dist'),
         historyApiFallback: true,
         host: '0.0.0.0',
@@ -33,6 +33,7 @@ const devConfig = {
             "/api/*": "http://localhost:8090/$1",
             "/v1":{
                 target: "http://120.79.33.178:8080/p2g",
+                // target: "http://192.168.0.120:8080/p2g",
                 secure:false,
                 changeOrigin: true,
                 pathRewrite: {

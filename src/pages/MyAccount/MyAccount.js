@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Layout, Button, Calendar, DatePicker, Table, Row, Col, Modal,message } from 'antd';
+import { Tabs, Layout, Button, Calendar, DatePicker, Table, Row, Col, Modal, message, Form, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import styles from './style.css';
 import Nav from '../../components/Nav/Nav';
@@ -8,23 +8,8 @@ const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const { Header, Footer, Sider, Content } = Layout;
 const RangePicker = DatePicker.RangePicker;
-const columns = [{
-  title: '交易时间',
-  dataIndex: 'transTime',
-  render: text => <a href="#">{text}</a>,
-}, {
-  title: '交易名称',
-  dataIndex: 'transName',
-}, {
-  title: '交易金额',
-  dataIndex: 'transPrice',
-}, {
-  title: '状态',
-  dataIndex: 'transStatus',
-}, {
-  title: '操作',
-  dataIndex: 'transOperator',
-}];
+const FormItem = Form.Item;
+
 const data = [{
   key: '1',
   transTime: '2018-01-02',
@@ -48,14 +33,18 @@ const data = [{
   transOperator: '审核中'
 }];
 
-export default class MyAccount extends Component {
+class MyAccount extends Component {
   state = {
-    bindStatus:true
+    bindStatus: false,
+    accountId: sessionStorage.getItem("accountId"),
+    token: sessionStorage.getItem("token"),
+    visible: false,
+    price: 0
   }
   componentDidMount() {
     var that = this;
-    const accountId = sessionStorage.getItem("accountId");
-    const token = sessionStorage.getItem("token");
+    const accountId = that.state.accountId;
+    const token = that.state.token;
     console.log(token);
     if (accountId == null || token == null) {
       confirm({
@@ -69,36 +58,49 @@ export default class MyAccount extends Component {
     else {
       // const formData = new FormData();
       // formData.append('accountId', accountId);
-      // formData.append('token', token);      
-      fetch(`/v1/inv_basic?token=${token}&accountId=${accountId}`, {//注册功能的url地址
+      // formData.append('token', token);  
+      this.getRecord();
+      let url = "/v1/account/accountInfo";
+      let params = {
+        "token": token,
+        "uid": accountId
+      }
+      if (params) {
+        let paramsArray = [];
+        //拼接参数  
+        Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+        if (url.search(/\?/) === -1) {
+          url += '?' + paramsArray.join('&')
+        } else {
+          url += '&' + paramsArray.join('&')
+        }
+      }
+      let myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+      fetch(url, {//注册功能的url地址
         method: 'GET',
-        headers: {
-        },
+        headers: myHeaders,
       })
         .then(function (response) {
           console.log(response);
           if (response.ok) {
-            // response.json().then(function (data) {
-            //   console.log(data);
-            //   if (data.code == 0) {
-            //     that.setState({
-            //       AccountBasicInfo:data.data
-            //     })                
-            //     console.log(data.data);
-            //   }
-            //   else {
-            //     that.setState({
-            //       AccountBasicInfo:{}
-            //     }) 
-            //   }
-            // })
-            // .catch(function (error) {
-            //   message.error('未知异常');
-            // })
-
-            that.setState({
-                    AccountBasicInfo:{}
-                  })
+            response.json().then(function (data) {
+              console.log(data);
+              if (data.code == 0) {
+                that.setState({
+                  AccountBasicInfo: data.data
+                })
+                console.log(data.data);
+              }
+              else {
+                that.setState({
+                  AccountBasicInfo: {}
+                })
+              }
+            })
+              .catch(function (error) {
+                message.error('未知异常');
+              })
           }
         })
         .catch(function (error) {
@@ -106,8 +108,111 @@ export default class MyAccount extends Component {
         })
     }
   }
+  check = (record) => {
+    this.showModal();
+    const rid = record.id;
+    console.log(rid);
+    this.setState({
+      rid: rid
+    })
+  }
+  changePrice = (e) => {
+    console.log(e.target.value);
+    this.setState({
+      price: e.target.value
+    })
+  }
+  immediateApply = () => {
+    var that = this;
+    const accountId = this.state.accountId;
+    const token = this.state.token;
+    const formData = new FormData();
+    formData.append('accountId', accountId);
+    formData.append('token', token);
+    formData.append('rid', that.state.rid);
+    formData.append('price', that.state.price);
+    fetch('/v1/transfer/initTransfer', {//注册功能的url地址
+      method: 'POST',
+      headers: {
+      },
+      body: formData
+    })
+      .then(function (response) {
+        if (response.ok) {
+          response.json().then(function (data) {
+            if (data.code == 0) {
+              message.success("发起转让成功");
+              history.push("/myaccount");
+            }
+            else {
+              message.error(data.message);
+            }
+          });
+        }
+      })
+      .catch(function (error) {
+        message.error('未知异常');
+      })
+  }
+  getRecord=()=>{
+    const accountId = this.state.accountId;
+    const token = this.state.token;
+    var that = this;
+      let url = "/v1/inv_record/list";
+      let params = {
+        "token": token,
+        "accountId": accountId
+      }
+      if (params) {
+        let paramsArray = [];
+        //拼接参数  
+        Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+        if (url.search(/\?/) === -1) {
+          url += '?' + paramsArray.join('&')
+        } else {
+          url += '&' + paramsArray.join('&')
+        }
+      }
+      let myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+      fetch(url, {//注册功能的url地址
+        method: 'GET',
+        headers: myHeaders,
+      })
+        .then(function (response) {
+          console.log(response);
+          if (response.ok) {
+            response.json().then(function (data) {
+              console.log(data);
+              if (data.code == 0) {
+                let dataTemp = data.data;
+                console.log(dataTemp);
+                that.setState({
+                  InvRecord: data.data
+                })
+
+              }
+              else {
+                that.setState({
+                  InvRecord: {}
+                })
+              }
+            })
+              .catch(function (error) {
+                message.error('未知异常');
+              })
+          }
+        })
+        .catch(function (error) {
+          message.error('未知异常');
+        })
+  }
   callback = (key) => {
-    if (key == 3) {
+    const accountId = this.state.accountId;
+    const token = this.state.token;
+    if (key == 2) {
+      this.getRecord();
+    } else if (key == 3) {
       var that = this;
       const formData = new FormData();
       formData.append('uid', accountId);
@@ -137,16 +242,92 @@ export default class MyAccount extends Component {
           }
         })
         .catch(function (error) {
-          message.error('注册失败');
+          message.error('未知异常');
         })
+    } else if (key == 4) {
+      var that = this;
+      const formData = new FormData();
+      formData.append('accountId', accountId);
+      formData.append('token', token);
+      fetch('/v1/account/getInvTransactionInfo', {//注册功能的url地址
+        method: 'POST',
+        headers: {
+        },
+        body: formData
+      })
+        .then(function (response) {
+          if (response.ok) {
+            response.json().then(function (data) {
+              console.log(data);
+              if (data.code == 0) {
+                that.setState({
+                  bindStatus: true,
+                  bankCard: data.data
+                })
+                console.log(data.data);
+              }
+              else {
+                message.error(data.message);
+              }
+            });
+          }
+        })
+        .catch(function (error) {
+          message.error('未知异常');
+        })
+    }else if (key == 5) {
+this.getTransferList();
     }
     console.log(key);
+  }
+  getTransferList=()=>{
+    var that=this;
+    const formData = new FormData();
+    const accountId = sessionStorage.getItem("accountId");
+    const token = sessionStorage.getItem("token");
+    formData.append('accountId', accountId);
+    formData.append('token', token);
+    fetch('/v1/transfer/transfer', {//注册功能的url地址
+      method: 'POST',
+      headers: {
+      },
+      body: formData
+    })
+      .then(function (response) {
+        if (response.ok) {
+          response.json().then(function (data) {
+            console.log(data);
+            if (data.code == 0) {
+              that.setState({
+                TransList:data.data
+              })
+              console.log(data.data);
+            }
+            else {
+              message.error(data.message);
+            }
+          });
+        }
+      })
+      .catch(function (error) {
+        message.error('未知异常');
+      })
   }
   onPanelChange = (value, mode) => {
     console.log(value, mode);
   }
   onChange = (date, dateString) => {
     console.log(date, dateString);
+  }
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  }
+  hideModal = () => {
+    this.setState({
+      visible: false,
+    });
   }
   handleUnBund = () => {
     confirm({
@@ -187,83 +368,118 @@ export default class MyAccount extends Component {
     });
   }
   render() {
-    const {bindStatus, fundRecordList,AccountBasicInfo } = this.state;
+    const { bindStatus, fundRecordList, AccountBasicInfo, bankCard, InvRecord,TransList } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 4, offset: 0 },
+        sm: { span: 4, offset: 0 }
+      },
+      wrapperCol: {
+        xs: { span: 18, offset: 1 },
+        sm: { span: 18, offset: 1 }
+      }
+    };    
+    const columnsTransfer = [{
+      title: '转让时间',
+      dataIndex: 'transferDate',
+      render: text => < a href=" ">{text}</ a>,
+    }, {
+      title: '转让产品名称',
+      dataIndex: 'name',
+    }, {
+      title: '金额',
+      dataIndex: 'price',
+    }, {
+      title: '预期收益',
+      dataIndex: 'yield',
+    },{
+      title: '转让状态',
+      dataIndex: 'status',
+    }];
+    const columnsFund = [{
+      title: '交易时间',
+      dataIndex: 'transTime',
+      render: text => < a href=" ">{text}</ a>,
+    }, {
+      title: '交易名称',
+      dataIndex: 'transName',
+    }, {
+      title: '交易金额',
+      dataIndex: 'transPrice',
+    }, {
+      title: '状态',
+      dataIndex: 'transStatus',
+    }, {
+      title: '操作',
+      dataIndex: 'transOperator',
+    }];
+    const columns = [{
+      title: '交易ID',
+      key: 'id',
+      dataIndex: 'id',
+    }, {
+      title: '交易时间',
+      key: 'orderTime',
+      dataIndex: 'orderTime',
+    }, {
+      title: '产品名称',
+      key: 'productName',
+      dataIndex: 'productName',
+    }, {
+      title: '交易金额',
+      key: 'investmentAmount',
+      dataIndex: 'investmentAmount',
+    }, {
+      title: '预期收益',
+      key: 'exceptEarning',
+      dataIndex: 'exceptEarning',
+    }, {
+      title: '操作',
+      dataIndex: 'transOperator',
+      render: (text, record) => (
+        <div>
+          <Form style={{ width: '50%' }}>
+            <FormItem style={{ textAlign: 'center' }}>
+              <Button
+                type="primary"
+                size="large"
+                style={{ width: '93', marginTop: '15px' }}
+                onClick={this.check.bind(this, record)}
+              // htmlType="submit"
+              >转让
+            </Button>
+              <Modal
+                title="立即支付"
+                visible={this.state.visible}
+                onOk={this.immediateApply}
+                onCancel={this.hideModal}
+                okText="确认"
+                cancelText="取消"
+              >
+                <Input value={this.state.price} onChange={this.changePrice} />
+                {/* <FormItem
+                  {...formItemLayout}
+                  label="转让金额"
+                  colon={false}
+                >
+                  {getFieldDecorator('transPwd', {
+                  })(
+                    <Input />
+                  )} */}
+                {/* </FormItem> */}
+              </Modal>
+            </FormItem>
+          </Form>
+        </div>
+      )
+    }];
     if (AccountBasicInfo === undefined) return null;
     return (
       <div>
         <Nav />
         <div className="mainLeaf1">
           <Tabs defaultActiveKey="1" onChange={this.callback}>
-            <TabPane tab="账户纵览" key="1">
-              <div className="layout">
-                <div className="myinvestment">
-                  <div className="myinvesttop">
-                    <span style={{ fontSize: '20px' }}>我的投资</span>
-                    <span style={{ marginLeft: '10px' }}>总资产 = 在投资金 + 可用余额 + 待收收益</span>
-                    <span style={{ float: 'right' }}> >查看我的投资</span>
-                  </div>
-                  <div className="content">
-                    <span>总资产(元)</span>
-                    <span>在投资金(元)</span>
-                    <span>已收收益(元)</span>
-                    <span>代收收益(元)</span>
-                  </div>
-                  <div className="content" style={{ fontSize: '25px' }}>
-                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
-                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
-                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
-                    <span>{AccountBasicInfo.asset?AccountBasicInfo.asset:0}</span>
-                  </div>
-                </div>               
-              </div>
-              <div className="myinvestment">
-                <div className="myinvesttop">
-                  <span style={{ fontSize: '20px' }}>账户资金</span>
-                  <span style={{ float: 'right' }}> >查看资金记录</span>
-                </div>
-                <div className="contentTwo">
-                  <div>
-                    <div>可用余额(元)</div>
-                    <div style={{ fontSize: '25px' }}>{AccountBasicInfo.asset-AccountBasicInfo.totalInvestment}</div>
-                  </div>
-                  <div>
-                    <Button type="primary" size="large" style={{ width: '100px' }}>充值</Button>
-                    <Button type="default" size="large" style={{ marginLeft: '20px', width: '100px' }}>提现</Button>
-                  </div>
-                </div>
-              </div>
-              <div className="myinvestment" style={{ height: '500px' }}>
-                <div className="myinvesttop">
-                  <span style={{ fontSize: '20px' }}>回款计划</span>
-                  <span style={{ marginLeft: '10px' }}>下次回款日期无，回款金额0元</span>
-                </div>
-                <div className="content">
-                  <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
-                    <Calendar fullscreen={false} onPanelChange={this.onPanelChange} />
-                  </div>
-                </div>
-              </div>
-              <div className="myinvestment">
-                <div className="myinvesttop">
-                  <span style={{ fontSize: '20px' }}>专享推荐 | 特惠推荐</span>
-                  <span style={{ float: 'right' }}> >更多</span>
-                </div>
-                <div className="content" style={{ fontSize: '20px' }}>
-                  <span>华坪改造-010</span>
-                  <span>8.5%</span>
-                  <span>20 万元</span>
-                  <span>731天</span>
-                  <span>国企(AA)担保</span>
-                </div>
-                <div className="content">
-                  <span>剩余金额： 300万</span>
-                  <span>预期年化收益率</span>
-                  <span>最低投资金额</span>
-                  <span>产品期限</span>
-                  <span>增信措施</span>
-                </div>
-              </div>
-            </TabPane>
             <TabPane tab="我的投资" key="2">
               <div className="layout">
                 <div className="partOne">我的投资</div>
@@ -272,18 +488,22 @@ export default class MyAccount extends Component {
                     <span style={{ fontSize: '20px' }}>投资概况</span>
                   </div>
                   <div className="content">
+                    <span>总资产(元)</span>
+                    <span>在投资金(元)</span>
                     <span>投资金额(元)</span>
-                    <span>已收收益(元)</span>                    
+                    <span>已收收益(元)</span>
                   </div>
                   <div className="content" style={{ fontSize: '25px' }}>
+                    <span>{AccountBasicInfo.asset}</span>
+                    <span>{AccountBasicInfo.investAmount}</span>
                     <span>{AccountBasicInfo.totalInvestment}</span>
-                    <span>{AccountBasicInfo.totalProfit}</span>                   
+                    <span>{AccountBasicInfo.totalProfit}</span>
                   </div>
                 </div>
-                <div className="myinvestment" style={{ height: '500px' }}>
+                <div className="myinvestment" style={{ height: 'auto' }}>
                   <Tabs defaultActiveKey="1" onChange={this.callback}>
                     <TabPane tab="投资记录" key="1">
-                    <Table columns={columns} dataSource={data} style={{ marginTop: '30px' }} />
+                      <Table rowKey="id" columns={columns} dataSource={InvRecord} style={{ marginTop: '30px' }} />
                     </TabPane>
                   </Tabs>
                 </div>
@@ -327,12 +547,11 @@ export default class MyAccount extends Component {
                     <Button>购买记录</Button>
                     <Button>收益记录</Button>
                   </div>
-                  <Table columns={columns} dataSource={data} style={{ marginTop: '30px' }} />
+                  <Table columns={columnsFund} dataSource={data} style={{ marginTop: '30px' }} />
                 </div>
               </div>
             </TabPane>
-            <TabPane tab="消息中心" key="4">资金管理</TabPane>
-            <TabPane tab="账户设置" key="5">
+            <TabPane tab="账户设置" key="4">
               <div className="myinvesttop">
                 <span style={{ fontSize: '20px' }}>我的账户</span>
                 <Tabs defaultActiveKey="11">
@@ -342,37 +561,42 @@ export default class MyAccount extends Component {
                         <div className="myinvesttop">
                           <span style={{ fontSize: '18px' }}>银行存管账户</span>
                           <span style={{ marginLeft: '10px' }}>(资金第三方保全认证，保障您的资金安全，核实您的有效身份。)</span>
-                          <span style={{ float: 'right' }}> {bindStatus?"已开通":"未开通"}</span>
+                          <span style={{ float: 'right' }}> {bindStatus ? "已开通" : "未开通"}</span>
                         </div>
 
-                        <div style={{display:bindStatus?'':'none'}}>
-                          <Row>
-                            <Col span={12}>银行卡号：</Col>
-                            <Col span={12}>62284783898202885171</Col>
+                        <div style={{ display: bindStatus ? '' : 'none' }}>
+                          <Row style={{marginBottom :'15px'}}>
+                            <Col span={4} offset={1}>银行卡号：</Col>
+                            <Col span={6}>{bankCard}</Col>
                           </Row>
-                          <Row>
-                            <Col span={12}>持卡人：</Col>
-                            <Col span={12}>李珍珍</Col>
+                          <Row style={{marginBottom :'15px'}}>
+                            <Col span={4} offset={1}>持卡人：</Col>
+                            <Col span={6}>{AccountBasicInfo.name}</Col>
                           </Row>
-                          <Row>
-                            <Col span={12}>证件号码：</Col>
-                            <Col span={12}>411627199402017655</Col>
+                          <Row style={{marginBottom :'15px'}}>
+                            <Col span={4} offset={1}>证件号码：</Col>
+                            <Col span={6}>{AccountBasicInfo.identityCard}</Col>
                           </Row>
-                          <Row>
-                            <Col span={12}>银行卡状态：</Col>
-                            <Col span={12}>已绑定 <a onClick={this.handleUnBund}>解绑</a></Col>
+                          <Row style={{marginBottom :'15px'}}>
+                            <Col span={4} offset={1}>银行卡状态：</Col>
+                            <Col span={6}>已绑定 <a onClick={this.handleUnBund}>解绑</a></Col>
                           </Row>
                         </div>
-                        <div style={{marginTop:'50px',marginLeft:'15px',display:bindStatus?'none':''}}>
-                        <Button type="primary" size="large" style={{ width: '200px' }}><Link to="/pay">绑定银行卡</Link></Button>
+                        <div style={{ marginTop: '50px', marginLeft: '15px', display: bindStatus ? 'none' : '' }}>
+                          <Button type="primary" size="large" style={{ width: '200px' }}><Link to="/bindbank">绑定银行卡</Link></Button>
                         </div>
                       </div>
                     </div>
                   </TabPane>
-                  <TabPane tab="密码管理" key="22">
-                  </TabPane>
+                  {/* <TabPane tab="密码管理" key="22"> */}
+                  {/* </TabPane> */}
                 </Tabs>
               </div>
+            </TabPane>
+            <TabPane tab="我的转让" key="5">
+            <div style={{width:"80%"}}>
+            <Table  columns={columnsTransfer} dataSource={TransList} style={{ marginTop: '30px' }} />
+            </div>
             </TabPane>
           </Tabs>
         </div>
@@ -380,3 +604,5 @@ export default class MyAccount extends Component {
     );
   }
 }
+const MyAccountDemo = Form.create()(MyAccount);
+export default MyAccountDemo;

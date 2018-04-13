@@ -77,12 +77,13 @@ class Nav extends Component {
             <Menu.Item key="1"><Link to="/">首页</Link></Menu.Item>
             <Menu.Item key="2"><Link to="/product">理财频道</Link></Menu.Item>
             <Menu.Item key="3"><Link to="/transfer">转让专区</Link></Menu.Item>
-            <Menu.Item key="4"><Link to="myaccount">我的账户</Link></Menu.Item>
-            <Menu.Item key="5">
+            <Menu.Item key="4"><Link to="/myaccount">我的账户</Link></Menu.Item>
+            <Menu.Item key="5"><Link to="/message">消息中心</Link></Menu.Item>
+            <Menu.Item key="6">
               <Link to="/login" style={{ display: accountId == null ? '' : 'none' }}>登陆</Link>
               <a href="/" style={{ display: accountId == null ? 'none' : '' }}>欢迎您 {accountMobile}</a>
             </Menu.Item>
-            <Menu.Item key="6" >
+            <Menu.Item key="7" >
               <Link to="/register" style={{ display: accountId == null ? '' : 'none' }}>注册</Link>
               <a href="/login" onClick={this.handleSignOut} style={{ display: accountId == null ? 'none' : '' }}>注销</a>
             </Menu.Item>

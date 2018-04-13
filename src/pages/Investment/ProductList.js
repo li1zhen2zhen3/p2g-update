@@ -24,10 +24,21 @@ export default class ProductList extends Component {
     state = {
         current: 'mail',
         pid: sessionStorage.getItem('pid'),
-        investValue: 10000
+        investValue: 10000,
     }
     componentDidMount() {
+        var that=this;
         const { pid } = this.state;
+        const transferBoolean=sessionStorage.getItem('transferBoolean');
+        if(transferBoolean==1){
+            this.setState({
+                transferBoolean:1
+            })
+        }else{
+            this.setState({
+                transferBoolean:0
+            })
+        }       
         const formData = new FormData();
         formData.append('pid', pid);
         fetch('/v1/product/getProductByPId', {//获取首页展示产品列表
@@ -40,7 +51,7 @@ export default class ProductList extends Component {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.code == 0) {
-                            this.setState({
+                            that.setState({
                                 productDetail: data.data,
                             });
                             console.log(data.data);
@@ -86,7 +97,7 @@ export default class ProductList extends Component {
    
 
     render() {
-        const { productDetail, loading } = this.state;
+        const { productDetail, loading,transferBoolean } = this.state;
         if (productDetail === undefined) return null;
         return (
             // <ScopedStyle style={[ProductListCss]}>
@@ -111,13 +122,13 @@ export default class ProductList extends Component {
                                         <div className="downInfo">产品期限</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo">{productDetail.miniInvestment} <span className="up-percent">万元</span></div>
+                                        <div className="upInfo" >{productDetail.miniInvestment} <span className="up-percent">万元</span></div>
                                         <div className="downInfo">起投金额</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo" style={{fontSize:'15px'}}>实付金额：<InputNumber min={10000} value={this.state.investValue} onChange={this.handleValueChange} /></div>
-                                       <div></div>
-                                        <div className="lastInfo">即时计息，每半年收益，到期回本</div>
+                                        <div className="upInfo" style={{fontSize:'15px'}}>实付金额：<InputNumber min={10000} max={20000} disabled={true} value={this.state.investValue} onChange={this.handleValueChange} /></div>
+                                       <div className="lastInfo1" style={{display:transferBoolean==1?'':'none'}}>ceshisss</div>
+                                        <div className="lastInfo1">即时计息，每半年收益，到期回本</div>
                                     </div>
                                     <div className="info">
                                         <div className="upInfo"><Button type="primary" onClick={this.immediateInvest}>立即投资</Button></div>
