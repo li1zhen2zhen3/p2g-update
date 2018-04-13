@@ -130,7 +130,7 @@ class MyAccount extends Component {
     formData.append('accountId', accountId);
     formData.append('token', token);
     formData.append('rid', that.state.rid);
-    formData.append('price', that.state.price);
+    formData.append('price', that.state.price*100);
     fetch('/v1/transfer/initTransfer', {//注册功能的url地址
       method: 'POST',
       headers: {
@@ -475,10 +475,10 @@ this.getTransferList();
                     <span style={{ fontSize: '20px' }}>投资概况</span>
                   </div>
                   <div className="surveyAccountBox"> 
-                  <div className="contentBoxxx"> <span>总资产(元)</span><span>{AccountBasicInfo.asset}</span></div>  
-                  <div className="contentBoxxx"><span>在投资金(元)</span> <span>{AccountBasicInfo.investAmount}</span></div>                
-                  <div className="contentBoxxx"><span>投资金额(元)</span><span>{AccountBasicInfo.totalInvestment}</span></div> 
-                  <div className="contentBoxxx"><span>已收收益(元)</span><span>{AccountBasicInfo.totalProfit}</span></div> 
+                  <div className="contentBoxxx"> <span>总资产(元)</span><span>{AccountBasicInfo.asset/100}</span></div>  
+                  <div className="contentBoxxx"><span>在投资金(元)</span> <span>{AccountBasicInfo.investAmount/100}</span></div>                
+                  <div className="contentBoxxx"><span>投资金额(元)</span><span>{AccountBasicInfo.totalInvestment/100}</span></div> 
+                  <div className="contentBoxxx"><span>已收收益(元)</span><span>{AccountBasicInfo.totalProfit/100}</span></div> 
                   </div>
                 </div>
                 <div className="myinvestment" style={{ height: 'auto' }}>

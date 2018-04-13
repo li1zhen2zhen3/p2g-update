@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import { Layout, Menu, Breadcrumb, message,Modal,Input } from 'antd';
+import { Layout, Menu, Breadcrumb, message, Modal, Input } from 'antd';
 import { Carousel, Icon } from 'antd';
 import { Button } from 'antd';
 import { BackTop } from 'antd';
@@ -24,13 +24,13 @@ export default class TransferList extends Component {
         current: 'mail',
         tid: sessionStorage.getItem('tid'),
         investValue: 10000,
-        visible:false,
-        tpwd:''
+        visible: false,
+        tpwd: ''
     }
     componentDidMount() {
         const { tid } = this.state;
         const formData = new FormData();
-        formData.append('tid',sessionStorage.getItem('tid') );
+        formData.append('tid', sessionStorage.getItem('tid'));
         fetch('/v1/transfer/transferDetail', {//获取首页展示产品列表
             method: 'POST',
             headers: {
@@ -61,51 +61,55 @@ export default class TransferList extends Component {
             investValue: e
         });
     }
-    showModal=()=>{
-      this.setState({
-        visible: true
-      });
+    showModal = () => {
+        this.setState({
+            visible: true
+        });
 
     }
     hideModal = () => {
-      this.setState({
-        visible:false
-      });
+        this.setState({
+            visible: false
+        });
     }
     changeTpwd = (e) => {
-      console.log(e.target.value);
-      this.setState({
-        tpwd: e.target.value
-      })
+        console.log(e.target.value);
+        this.setState({
+            tpwd: e.target.value
+        })
     }
     immediateInvest = () => {
-      const formData = new FormData();
-      formData.append('tid', sessionStorage.getItem('tid'));
-      formData.append('accountId', sessionStorage.getItem('accountId'));
-      formData.append('tpwd', this.state.tpwd);
-      formData.append('token', sessionStorage.getItem('token'));
-      fetch('/v1/transfer/transferInvest', {//获取首页展示产品列表
-          method: 'POST',
-          headers: {
-          },
-          body: formData
-      })
-          .then((response) => {
-              if (response.ok) {
-                  response.json().then((data) => {
-                      if (data.code == 0) {
-                          message.success("投资转让产品成功");
-                      }
-                      else {
-                          message.error(data.message);
-                      }
-                  });
-              }
-          })
-          .catch((res) => {
-              message.error(res.status);
-          })
-    } 
+        const formData = new FormData();
+        formData.append('tid', sessionStorage.getItem('tid'));
+        formData.append('accountId', sessionStorage.getItem('accountId'));
+        formData.append('tpwd', this.state.tpwd);
+        formData.append('token', sessionStorage.getItem('token'));
+        fetch('/v1/transfer/transferInvest', {//获取首页展示产品列表
+            method: 'POST',
+            headers: {
+            },
+            body: formData
+        })
+            .then((response) => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        if (data.code == 0) {
+                            message.success("投资转让产品成功");
+                            history.push("/myaccount");
+                        } else if (data.code = 4010) {
+                            message.error(data.message);
+                            history.push('/pay');
+                        }
+                        else {
+                            message.error(data.message);
+                        }
+                    });
+                }
+            })
+            .catch((res) => {
+                message.error(res.status);
+            })
+    }
     handleClick = (e) => {
         console.log('click ', e);
         this.setState({
@@ -116,12 +120,12 @@ export default class TransferList extends Component {
     callback = (key) => {
         console.log(key);
         if (key = 1) {
-    
+
         } else if (key == 2) {
-    
+
         }
     }
-   
+
 
     render() {
         const { transferDetail, loading } = this.state;
@@ -147,7 +151,7 @@ export default class TransferList extends Component {
                                         <div className="downInfo">产品期限</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo">{(transferDetail.investmentRecordEntity.investmentAmount + transferDetail.price)/100} <span className="up-percent">元</span></div>
+                                        <div className="upInfo">{(transferDetail.investmentRecordEntity.investmentAmount + transferDetail.price) / 100} <span className="up-percent">元</span></div>
                                         <div className="downInfo">转让金额</div>
                                     </div>
                                     <div className="info">
@@ -155,34 +159,34 @@ export default class TransferList extends Component {
                                         <div className="downInfo">转让时间</div>
                                     </div>
                                     <div className="info">
-                                        <div className="upInfo" style={{fontSize:'15px'}}>投资金额：<InputNumber min={10000} value={(transferDetail.investmentRecordEntity.investmentAmount + transferDetail.price)/100}/>元</div>
-                                       <div></div>
+                                        <div className="upInfo" style={{ fontSize: '15px' }}>投资金额：<InputNumber min={10000} value={(transferDetail.investmentRecordEntity.investmentAmount + transferDetail.price) / 100} />元</div>
+                                        <div></div>
                                         <div className="lastInfo">按季收益</div>
                                     </div>
                                     <div className="info">
                                         <div className="upInfo">
-                                        <Button
-                                          type="primary"
-                                          size="large"
-                                          style={{ width: '93', marginTop: '15px' }}
-                                          onClick={this.showModal}
-                                        // htmlType="submit"
-                                        >立即投资
+                                            <Button
+                                                type="primary"
+                                                size="large"
+                                                style={{ width: '93', marginTop: '15px' }}
+                                                onClick={this.showModal}
+                                            // htmlType="submit"
+                                            >立即投资
                                       </Button>
-                                        <Modal
-                                          title="立即投资"
-                                          visible={this.state.visible}
-                                          onOk={this.immediateInvest}
-                                          onCancel={this.hideModal}
-                                          okText="确认"
-                                          cancelText="取消"
-                                        >
-                                        <span>交易密码：</span>
-                                          <Input type="password" value={this.state.tpwd} onChange={this.changeTpwd} />
-                                        </Modal>
+                                            <Modal
+                                                title="立即投资"
+                                                visible={this.state.visible}
+                                                onOk={this.immediateInvest}
+                                                onCancel={this.hideModal}
+                                                okText="确认"
+                                                cancelText="取消"
+                                            >
+                                                <span>交易密码：</span>
+                                                <Input type="password" value={this.state.tpwd} onChange={this.changeTpwd} />
+                                            </Modal>
                                         </div>
                                     </div>
-                            
+
                                 </div>
                             </div>
                         </div>

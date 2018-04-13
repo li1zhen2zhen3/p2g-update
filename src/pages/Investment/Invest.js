@@ -106,11 +106,13 @@ class Invest extends React.Component {
                         if (data.code == 0) {                           
                             console.log(data.data);
                             message.success("投资成功");
-                            history.push("myaccount")
+                            history.push("/myaccount")
                         }
-                        else {
+                        else if(data.code=4010){
                             message.error(data.message);
                             history.push('/pay');
+                        }else{
+                            message.error(data.message);
                         }
                     });
                 }

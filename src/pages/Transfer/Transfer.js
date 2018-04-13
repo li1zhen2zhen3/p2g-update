@@ -114,11 +114,11 @@ class Transfer extends Component {
                         <div className="downInfo">预计下一收款日</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo" style={{ fontSize: "13px" }}>{item.investmentRecordEntity.govProduct.miniInvestment}元</div>
+                        <div className="upInfo" style={{ fontSize: "13px" }}>{item.investmentRecordEntity.govProduct.miniInvestment/100}元</div>
                         <div className="downInfo">项目价值</div>
                       </div>
                       <div className="info">
-                        <div className="upInfo" style={{ fontSize: "13px" }}>{item.investmentRecordEntity.govProduct.miniInvestment}元</div>
+                        <div className="upInfo" style={{ fontSize: "13px" }}>{item.investmentRecordEntity.govProduct.miniInvestment/100}元</div>
                         <div className="downInfo">转让价格</div>
                       </div>
                       <div className="info">
